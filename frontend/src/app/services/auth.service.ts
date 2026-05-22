@@ -15,7 +15,7 @@ interface AuthResponse {
 export class AuthService {
   private http = inject(HttpClient);
   private router = inject(Router);
-  private apiUrl = 'http://localhost:8080/api/auth';
+  private apiUrl = 'https://dietapponsteroids.onrender.com/api/auth';
 
   currentUser = signal<{ username: string; name: string } | null>(null);
   isAuthenticated = signal<boolean>(false);

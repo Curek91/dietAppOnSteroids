@@ -7,7 +7,7 @@ import { WorkoutPlan } from '../models/types';
   providedIn: 'root'
 })
 export class WorkoutService {
-  private apiUrl = 'http://localhost:8080/api/workouts';
+  private apiUrl = 'https://dietapponsteroids.onrender.com/api/workouts';
 
   constructor(private http: HttpClient) {}
 

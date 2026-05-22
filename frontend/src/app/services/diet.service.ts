@@ -7,7 +7,7 @@ import { DietPlan } from '../models/types';
   providedIn: 'root'
 })
 export class DietService {
-  private apiUrl = 'http://localhost:8080/api/diets';
+  private apiUrl = 'https://dietapponsteroids.onrender.com/api/diets';
 
   constructor(private http: HttpClient) {}
 

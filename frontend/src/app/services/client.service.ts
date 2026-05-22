@@ -7,7 +7,7 @@ import { Client, Progress } from '../models/types';
   providedIn: 'root'
 })
 export class ClientService {
-  private apiUrl = 'http://localhost:8080/api';
+  private apiUrl = 'https://dietapponsteroids.onrender.com/api';
 
   constructor(private http: HttpClient) {}
 
