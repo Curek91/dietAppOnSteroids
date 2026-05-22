@@ -321,28 +321,42 @@ src/app/components/client-detail/
 #### Wymagania wstępne (Prerequisites):
 1. **JDK 17** lub nowsza wersja zainstalowana w systemie.
 2. **Node.js** (wersja LTS, np. v18 lub nowsza) wraz z managerem `npm`.
-3. **Oracle Database 23c Free** (z włączonym PDB o nazwie `freepdb1` uruchomionym lokalnie na porcie `1521`).
+3. **Baza danych (do wyboru)**:
+   - **Baza H2 (Domyślnie, wbudowana w pamięci)**: Nie wymaga instalacji żadnego dodatkowego oprogramowania! Idealna do szybkiego przetestowania aplikacji.
+   - **Oracle Database 23c Free**: Wymagana tylko w przypadku chęci trwałego zapisu danych w lokalnym lub zdalnym kontenerze Oracle (PDB o nazwie `freepdb1` na porcie `1521`).
 
-#### Krok 1: Przygotowanie bazy danych Oracle
-Zaloguj się do bazy danych z uprawnieniami administratora i wykonaj skrypt:
+#### Krok 1: Przygotowanie bazy danych Oracle (Opcjonalnie)
+*Jeżeli decydujesz się na korzystanie z bazy w pamięci H2 (domyślnie), pomiń ten krok.*
+Zaloguj się do bazy danych Oracle z uprawnieniami administratora i wykonaj skrypt:
 ```sql
 CREATE USER diet_app IDENTIFIED BY oracle;
 GRANT CONNECT, RESOURCE, UNLIMITED TABLESPACE TO diet_app;
 ```
 
 #### Krok 2: Konfiguracja i start Backend (Spring Boot)
-1. Sprawdź konfigurację połączenia z bazą w pliku `backend/src/main/resources/application.properties`:
-   ```properties
-   spring.datasource.url=jdbc:oracle:thin:@localhost:1521/freepdb1
-   spring.datasource.username=diet_app
-   spring.datasource.password=oracle
-   spring.jpa.hibernate.ddl-auto=update
-   ```
-2. Wejdź do folderu `backend/` i uruchom polecenie:
+Aplikacja wspiera profile Spring Boot do wyboru bazy danych:
+
+1. **Profil H2 (Domyślny, baza w pamięci)**:
+   - Konfiguracja znajduje się w `backend/src/main/resources/application-h2.properties`.
+   - Aplikacja domyślnie uruchamia się z tym profilem. Dostęp do interaktywnej konsoli H2 jest możliwy pod adresem [http://localhost:8080/h2-console](http://localhost:8080/h2-console) (JDBC URL: `jdbc:h2:mem:diet_app`, użytkownik: `diet_app`, hasło: `oracle`).
+2. **Profil Oracle (Trwała baza danych)**:
+   - Konfiguracja znajduje się w `backend/src/main/resources/application-oracle.properties`.
+   - Aby włączyć ten profil, zmień parametr w `backend/src/main/resources/application.properties` na:
+     ```properties
+     spring.profiles.active=oracle
+     ```
+     lub uruchom aplikację bezpośrednio w konsoli z flagą profilu:
+     ```bash
+     mvn spring-boot:run -Dspring-boot.run.profiles=oracle
+     ```
+
+Uruchomienie serwera backendowego:
+1. Wejdź do folderu `backend/` i uruchom polecenie:
    ```bash
    mvn spring-boot:run
    ```
-   *Serwer uruchomi się na porcie `8080` i automatycznie utworzy tabele oraz załaduje dane początkowe (konta trenerów, baza produktów, podopieczni).*
+   *Serwer uruchomi się na porcie `8080` i automatycznie utworzy tabele oraz załaduje dane początkowe (konta trenerów, baza produktów, podopieczni) w wybranej bazie danych.*
+
 
 #### Krok 3: Instalacja i start Frontend (Angular)
 1. Przejdź do katalogu `frontend/`.
