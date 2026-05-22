@@ -1,0 +1,115 @@
+<!-- Workout Selector Bar -->
+<div class="glass-card diet-selector-bar animate-fade" *ngIf="workoutPlans().length > 0">
+  <div class="selector-left">
+    <label class="form-label select-label">Wybierz plan treningowy:</label>
+    <select [ngModel]="selectedWorkoutPlanId()" (ngModelChange)="selectWorkoutPlan($event)" class="form-input plan-select-dropdown">
+      <option *ngFor="let plan of workoutPlans()" [value]="plan.id">
+        {{ plan.name }} {{ plan.startDate && plan.endDate ? '(' + plan.startDate + ' - ' + plan.endDate + ')' : '' }}
+      </option>
+    </select>
+  </div>
+  <div class="selector-right">
+    <button class="btn btn-secondary btn-sm" (click)="createNewWorkoutPlan()">
+      + Nowy Plan Treningowy
+    </button>
+    <button class="btn btn-danger-outline btn-sm" *ngIf="workoutPlan()?.id" (click)="deleteActiveWorkoutPlan()">
+      Usuń ten plan
+    </button>
+  </div>
+</div>
+
+<div class="workout-plan-layout" *ngIf="workoutPlan()">
+  <div class="glass-card workout-summary-bar">
+    <div class="summary-meta">
+      <div class="plan-title-row">
+        <input type="text" [(ngModel)]="workoutPlan()!.name" class="form-input plan-name-input" placeholder="Nazwa planu treningowego..." />
+      </div>
+      <div class="plan-dates-row">
+        <div class="date-input-group">
+          <span class="date-label">Od:</span>
+          <input type="date" [(ngModel)]="workoutPlan()!.startDate" class="form-input plan-date-input" />
+        </div>
+        <div class="date-input-group">
+          <span class="date-label">Do:</span>
+          <input type="date" [(ngModel)]="workoutPlan()!.endDate" class="form-input plan-date-input" />
+        </div>
+      </div>
+    </div>
+    
+    <div class="summary-actions">
+      <button class="btn btn-secondary" style="margin-right: 12px;" (click)="addWorkoutDay()">
+        Dodaj Dzień
+      </button>
+      <button class="btn btn-primary" (click)="saveWorkout()">
+        Zapisz trening
+      </button>
+    </div>
+  </div>
+
+  <!-- Training Days Grid -->
+  <div class="workout-days-list">
+    <div *ngFor="let day of workoutPlan()!.days; let dayIdx = index" class="glass-card panel-card workout-day-card animate-fade">
+      <div class="workout-day-header">
+        <input type="text" [(ngModel)]="day.dayName" class="workout-day-title-input" />
+        <div class="day-actions">
+          <button class="btn btn-secondary btn-sm" (click)="addExerciseToDay(day)">
+            + Dodaj ćwiczenie
+          </button>
+          <button class="btn-icon text-danger" (click)="removeWorkoutDay(dayIdx)" title="Usuń dzień">
+            &times;
+          </button>
+        </div>
+      </div>
+
+      <div class="exercises-table-container">
+        <table class="exercises-table" *ngIf="day.exercises.length > 0; else noExercises">
+          <thead>
+            <tr>
+              <th style="width: 30%">Nazwa ćwiczenia</th>
+              <th style="width: 10%">Serie</th>
+              <th style="width: 15%">Powtórzenia</th>
+              <th style="width: 15%">Ciężar</th>
+              <th style="width: 25%">Uwagi</th>
+              <th style="width: 5%"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let ex of day.exercises; let exIdx = index">
+              <td>
+                <input type="text" [(ngModel)]="ex.exerciseName" class="form-input inline-table-input" />
+              </td>
+              <td>
+                <input type="number" [(ngModel)]="ex.sets" class="form-input inline-table-input" />
+              </td>
+              <td>
+                <input type="text" [(ngModel)]="ex.reps" class="form-input inline-table-input" placeholder="np. 8-10 lub 12" />
+              </td>
+              <td>
+                <input type="text" [(ngModel)]="ex.weight" class="form-input inline-table-input" placeholder="np. 80kg lub RPE 8" />
+              </td>
+              <td>
+                <input type="text" [(ngModel)]="ex.notes" class="form-input inline-table-input" placeholder="Uwagi (np. 90s przerwy)" />
+              </td>
+              <td>
+                <button class="btn-icon text-danger" (click)="removeExerciseFromDay(day, exIdx)">
+                  &times;
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        
+        <ng-template #noExercises>
+          <div class="empty-dropzone-workout" (click)="addExerciseToDay(day)">
+            <p>Brak ćwiczeń w tym dniu. Kliknij tutaj, aby dodać pierwsze ćwiczenie!</p>
+          </div>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+  
+  <div class="form-group" style="margin-top: 30px;">
+    <label class="form-label">Ogólne wskazówki treningowe</label>
+    <textarea [(ngModel)]="workoutPlan()!.notes" rows="4" class="form-input" placeholder="Wskazówki cardio, rozgrzewka, suplementacja okołotreningowa..."></textarea>
+  </div>
+</div>

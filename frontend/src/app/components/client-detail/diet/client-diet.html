@@ -1,0 +1,229 @@
+<!-- Diet Selector Bar -->
+<div class="glass-card diet-selector-bar animate-fade" *ngIf="dietPlans().length > 0">
+  <div class="selector-left">
+    <label class="form-label select-label">Wybierz plan diety:</label>
+    <select [ngModel]="selectedDietPlanId()" (ngModelChange)="selectDietPlan($event)" class="form-input plan-select-dropdown">
+      <option *ngFor="let plan of dietPlans()" [value]="plan.id">
+        {{ plan.name }} {{ plan.startDate && plan.endDate ? '(' + plan.startDate + ' - ' + plan.endDate + ')' : '' }}
+      </option>
+    </select>
+  </div>
+  <div class="selector-right">
+    <button class="btn btn-secondary btn-sm" (click)="createNewDietPlan()">
+      + Nowy Plan Diety
+    </button>
+    <button class="btn btn-danger-outline btn-sm" *ngIf="dietPlan()?.id" (click)="deleteActiveDietPlan()">
+      Usuń ten plan
+    </button>
+  </div>
+</div>
+
+<div class="diet-plan-layout" *ngIf="dietPlan()">
+  <!-- Dynamic Macro Totals Bar -->
+  <div class="glass-card diet-summary-bar">
+    <div class="summary-meta">
+      <div class="plan-title-row">
+        <input type="text" [(ngModel)]="dietPlan()!.name" class="form-input plan-name-input" placeholder="Nazwa planu diety..." />
+      </div>
+      <div class="plan-dates-row">
+        <div class="date-input-group">
+          <span class="date-label">Od:</span>
+          <input type="date" [(ngModel)]="dietPlan()!.startDate" class="form-input plan-date-input" />
+        </div>
+        <div class="date-input-group">
+          <span class="date-label">Do:</span>
+          <input type="date" [(ngModel)]="dietPlan()!.endDate" class="form-input plan-date-input" />
+        </div>
+      </div>
+    </div>
+    
+    <div class="macro-chips-container">
+      <div class="macro-chip chip-kcal">
+        <span class="macro-val">{{ getDailyTotals().kcal }}</span>
+        <span class="macro-lbl">kcal</span>
+      </div>
+      <div class="macro-chip chip-protein">
+        <span class="macro-val">{{ getDailyTotals().protein }}g</span>
+        <span class="macro-lbl">Białko</span>
+      </div>
+      <div class="macro-chip chip-fat">
+        <span class="macro-val">{{ getDailyTotals().fat }}g</span>
+        <span class="macro-lbl">Tłuszcz</span>
+      </div>
+      <div class="macro-chip chip-carbs">
+        <span class="macro-val">{{ getDailyTotals().carbs }}g</span>
+        <span class="macro-lbl">Węgle</span>
+      </div>
+    </div>
+
+    <div class="summary-actions">
+      <button class="btn btn-primary" (click)="saveDiet()">
+        Zapisz dietę
+      </button>
+    </div>
+  </div>
+
+  <!-- Split Layout: Products pool vs Meal slots -->
+  <div class="diet-split-builder">
+    <!-- LEFT: Products Pool -->
+    <div class="glass-card panel-card products-pool-panel">
+      <div class="panel-header-row">
+        <h3 class="pane-subtitle">Baza Produktów</h3>
+        <button class="btn btn-secondary btn-sm" (click)="openProductModal()">
+          + Nowy produkt
+        </button>
+      </div>
+
+      <div class="pool-search-box">
+        <input 
+          type="text" 
+          placeholder="Wyszukaj produkt w bazie..." 
+          [ngModel]="productSearchQuery()"
+          (ngModelChange)="productSearchQuery.set($event); onProductSearch()"
+          class="form-input pool-search-input" />
+      </div>
+
+      <div class="products-list-scroll">
+        <div *ngFor="let prod of availableProducts()" class="product-pool-item glass-card">
+          <div class="prod-pool-info">
+            <h4 class="prod-pool-name">{{ prod.name }}</h4>
+            <div class="prod-pool-macros">
+              <span>{{ prod.calories }} kcal</span> | 
+              <span>B: {{ prod.protein }}g</span> | 
+              <span>T: {{ prod.fat }}g</span> | 
+              <span>W: {{ prod.carbohydrates }}g</span>
+            </div>
+          </div>
+          
+          <!-- Quick Meal Selector Dropdown -->
+          <div class="add-to-meal-container">
+            <select #mealSelect class="meal-add-select" (change)="addProductToMeal(prod, dietPlan()!.meals[+mealSelect.value]); mealSelect.value = ''">
+              <option value="" disabled selected>+</option>
+              <option *ngFor="let m of dietPlan()!.meals; let idx = index" [value]="idx">
+                {{ m.name }}
+              </option>
+            </select>
+          </div>
+        </div>
+        
+        <div *ngIf="availableProducts().length === 0" class="text-muted" style="text-align: center; padding: 20px;">
+          Brak produktów w bazie o podanej nazwie. Stwórz nowy produkt!
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: Meal slots -->
+    <div class="meals-builder-panel">
+      <div class="meals-header-row">
+        <h3 class="pane-subtitle">Posiłki w Planie</h3>
+        <button class="btn btn-secondary btn-sm" (click)="addMeal()">
+          Dodaj Posiłek
+        </button>
+      </div>
+
+      <div class="meals-list">
+        <div *ngFor="let meal of dietPlan()!.meals; let mealIdx = index" class="glass-card meal-slot-card animate-fade">
+          <div class="meal-slot-header">
+            <div class="meal-title-group">
+              <input type="text" [(ngModel)]="meal.name" class="meal-title-input" />
+              <span class="meal-macro-indicator">
+                {{ getMealTotals(meal).kcal }} kcal (B: {{ getMealTotals(meal).protein }}g, T: {{ getMealTotals(meal).fat }}g, W: {{ getMealTotals(meal).carbs }}g)
+              </span>
+            </div>
+            <button class="btn-icon text-muted" (click)="removeMeal(mealIdx)" title="Usuń posiłek">
+              &times;
+            </button>
+          </div>
+
+          <!-- Product items within the meal -->
+          <div class="meal-products-list">
+            <div *ngFor="let mp of meal.mealProducts; let mpIdx = index" class="meal-product-row">
+              <div class="mp-details">
+                <span class="mp-name">{{ mp.product.name }}</span>
+                <span class="mp-base-macros">({{ mp.product.calories }} kcal, B:{{ mp.product.protein }}, T:{{ mp.product.fat }}, W:{{ mp.product.carbohydrates }})</span>
+              </div>
+              
+              <div class="mp-inputs">
+                <div class="weight-input-container">
+                  <input 
+                    type="number" 
+                    [(ngModel)]="mp.amount" 
+                    min="1" 
+                    class="form-input weight-input" />
+                  <span class="unit-label">g</span>
+                </div>
+                
+                <span class="mp-calculated-kcal">
+                  {{ Math.round((mp.product.calories * (mp.amount || 0)) / 100) }} kcal
+                </span>
+                
+                <button class="btn-icon text-danger mp-remove-btn" (click)="removeProductFromMeal(meal, mpIdx)">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width:14px;height:14px;"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
+                </button>
+              </div>
+            </div>
+            
+            <div *ngIf="meal.mealProducts.length === 0" class="meal-empty-dropzone">
+              <p>Kliknij "+" przy produkcie z bazy po lewej, aby dodać do tego posiłku.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="form-group" style="margin-top: 25px;">
+        <label class="form-label">Uwagi do diety</label>
+        <textarea [(ngModel)]="dietPlan()!.notes" rows="4" class="form-input" placeholder="Zalecana suplementacja, wskazówki dotyczące spożywania..."></textarea>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Dodawania nowego produktu w bazie -->
+<div class="modal-overlay" *ngIf="isProductModalOpen()">
+  <div class="modal-content glass-card">
+    <div class="modal-header">
+      <h2 class="modal-title">Dodaj Nowy Produkt do Bazy</h2>
+      <button class="modal-close" (click)="closeProductModal()">&times;</button>
+    </div>
+    
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">Nazwa produktu *</label>
+        <input type="text" [(ngModel)]="newProductName" placeholder="np. Pierś z kurczaka, Chleb żytni..." class="form-input" required />
+      </div>
+      
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label">Kaloryczność (kcal / 100g) *</label>
+          <input type="number" [(ngModel)]="newProductKcal" placeholder="np. 120" class="form-input" required />
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label">Białko (g / 100g) *</label>
+          <input type="number" step="0.1" [(ngModel)]="newProductProtein" placeholder="np. 21.5" class="form-input" required />
+        </div>
+      </div>
+      
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label">Tłuszcze (g / 100g) *</label>
+          <input type="number" step="0.1" [(ngModel)]="newProductFat" placeholder="np. 1.3" class="form-input" required />
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label">Węglowodany (g / 100g) *</label>
+          <input type="number" step="0.1" [(ngModel)]="newProductCarbs" placeholder="np. 0" class="form-input" required />
+        </div>
+      </div>
+      
+      <p class="text-muted" style="font-size: 0.8rem; margin-top: 10px;">
+        Wartości makroskładników należy podawać na 100g produktu. Dodany produkt trafi do wspólnej bazy i będziesz mógł z niego korzystać u każdego podopiecznego.
+      </p>
+    </div>
+    
+    <div class="modal-actions">
+      <button class="btn btn-secondary" (click)="closeProductModal()">Anuluj</button>
+      <button class="btn btn-primary" (click)="createCustomProduct()">Utwórz produkt</button>
+    </div>
+  </div>
+</div>
