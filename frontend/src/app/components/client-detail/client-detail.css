@@ -320,13 +320,11 @@
 .products-pool-panel {
   display: flex;
   flex-direction: column;
-  height: 100%;
   box-sizing: border-box;
 }
 
 .products-list-scroll {
-  flex: 1;
-  min-height: 480px;
+  height: 700px; /* Fits exactly 10 products scrollably */
   overflow-y: auto;
   display: flex;
   flex-direction: column;
