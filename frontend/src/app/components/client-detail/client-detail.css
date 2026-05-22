@@ -1,0 +1,708 @@
+.detail-container {
+  max-width: 1300px;
+  margin: 30px auto;
+  padding: 0 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.back-link {
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition-smooth);
+}
+
+.back-link:hover {
+  color: var(--color-primary);
+  transform: translateX(-4px);
+}
+
+.back-icon {
+  width: 24px;
+  height: 24px;
+}
+
+.active-client-badge {
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  color: var(--color-accent-emerald);
+}
+
+/* Tabs Navigation */
+.tabs-nav {
+  display: flex;
+  padding: 8px;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.tab-btn {
+  background: transparent;
+  border: none;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  padding: 12px 20px;
+  border-radius: var(--border-radius-sm);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: var(--transition-smooth);
+}
+
+.tab-btn:hover {
+  color: var(--text-primary);
+  background: rgba(0, 0, 0, 0.03);
+}
+
+.tab-btn.active {
+  background: rgba(249, 115, 22, 0.1);
+  border: 1px solid rgba(249, 115, 22, 0.25);
+  color: var(--color-primary);
+  box-shadow: 0 2px 8px rgba(249, 115, 22, 0.08);
+}
+
+.tab-icon {
+  width: 18px;
+  height: 18px;
+}
+
+.panel-card {
+  padding: 30px;
+}
+
+.pane-title {
+  font-size: 1.4rem;
+  font-weight: 800;
+  margin-bottom: 25px;
+  position: relative;
+  padding-left: 15px;
+}
+
+.pane-title::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 15%;
+  height: 70%;
+  width: 4px;
+  background: var(--gradient-primary);
+  border-radius: 4px;
+}
+
+.pane-subtitle {
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: -0.2px;
+  margin-bottom: 15px;
+}
+
+/* Profile Form styling */
+.profile-form-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.profile-actions {
+  display: flex;
+  justify-content: flex-end;
+  border-top: 1px solid var(--card-border);
+  padding-top: 20px;
+  margin-top: 15px;
+}
+
+/* Progress Pane Styling */
+.progress-split-layout {
+  display: grid;
+  grid-template-columns: 350px 1fr;
+  gap: 25px;
+}
+
+@media (max-width: 900px) {
+  .progress-split-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.form-grid-small {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.progress-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.progress-chart-panel {
+  display: flex;
+  flex-direction: column;
+  height: 480px;
+}
+
+.chart-container {
+  flex: 1;
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+/* Historical table */
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.progress-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.progress-table th, .progress-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--card-border);
+  font-size: 0.9rem;
+}
+
+.progress-table th {
+  color: var(--text-secondary);
+  font-weight: 700;
+  background: rgba(249, 115, 22, 0.03);
+}
+
+.progress-table tr:hover {
+  background: rgba(249, 115, 22, 0.015);
+}
+
+.date-cell {
+  color: var(--color-accent-blue);
+  font-weight: 600;
+}
+
+.value-cell {
+  color: var(--text-primary);
+}
+
+.font-bold {
+  font-weight: 700;
+}
+
+/* --- DIET BUILDER STYLES --- */
+.diet-summary-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 30px;
+  gap: 20px;
+  flex-wrap: wrap;
+  border-left: 4px solid var(--color-primary);
+  margin-bottom: 25px;
+}
+
+.plan-name-input {
+  font-size: 1.2rem;
+  font-weight: 800;
+  border: none;
+  background: transparent;
+  padding: 4px 0;
+  color: var(--text-primary);
+  border-bottom: 1px dashed var(--text-muted);
+  border-radius: 0;
+  width: 250px;
+}
+
+.plan-name-input:focus {
+  border-bottom-color: var(--color-primary);
+  box-shadow: none;
+}
+
+.plan-subtitle {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.macro-chips-container {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.macro-chip {
+  padding: 10px 18px;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 90px;
+}
+
+.macro-val {
+  font-size: 1.25rem;
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.macro-lbl {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.chip-kcal {
+  background: linear-gradient(135deg, hsl(24, 90%, 58%) 0%, hsl(36, 95%, 54%) 100%);
+  color: white;
+  box-shadow: 0 4px 15px rgba(249, 115, 22, 0.25);
+}
+
+.chip-protein {
+  background: linear-gradient(135deg, hsl(150, 60%, 42%) 0%, hsl(162, 75%, 38%) 100%);
+  color: white;
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.18);
+}
+
+.chip-fat {
+  background: linear-gradient(135deg, hsl(10, 75%, 58%) 0%, hsl(351, 85%, 54%) 100%);
+  color: white;
+  box-shadow: 0 4px 15px rgba(239, 68, 68, 0.18);
+}
+
+.chip-carbs {
+  background: linear-gradient(135deg, hsl(200, 80%, 48%) 0%, hsl(190, 85%, 44%) 100%);
+  color: white;
+  box-shadow: 0 4px 15px rgba(14, 165, 233, 0.18);
+}
+
+.diet-split-builder {
+  display: grid;
+  grid-template-columns: 380px 1fr;
+  gap: 25px;
+}
+
+@media (max-width: 1000px) {
+  .diet-split-builder {
+    grid-template-columns: 1fr;
+  }
+}
+
+.panel-header-row, .meals-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.btn-sm {
+  padding: 6px 14px;
+  font-size: 0.8rem;
+  border-radius: 6px;
+}
+
+.pool-search-box {
+  margin-bottom: 15px;
+}
+
+.pool-search-input {
+  width: 100%;
+}
+
+.products-list-scroll {
+  height: 480px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-right: 5px;
+}
+
+.product-pool-item {
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  background: rgba(249, 115, 22, 0.02);
+}
+
+.prod-pool-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+
+.prod-pool-name {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.prod-pool-macros {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.add-to-meal-container {
+  position: relative;
+}
+
+.meal-add-select {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  border: 1px solid var(--card-border);
+  padding: 4px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 800;
+}
+
+/* Meals List */
+.meals-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.meal-slot-card {
+  padding: 20px;
+  border-left: 3px solid var(--color-accent-blue);
+  background: rgba(255, 255, 255, 0.45);
+}
+
+.meal-slot-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  padding-bottom: 8px;
+}
+
+.meal-title-group {
+  display: flex;
+  align-items: baseline;
+  gap: 15px;
+  flex-wrap: wrap;
+  flex: 1;
+}
+
+.meal-title-input {
+  font-family: inherit;
+  font-size: 1.05rem;
+  font-weight: 800;
+  border: none;
+  background: transparent;
+  color: var(--text-primary);
+  border-bottom: 1px dashed transparent;
+  padding: 2px 0;
+  width: 140px;
+}
+
+.meal-title-input:focus {
+  outline: none;
+  border-bottom-color: var(--color-accent-blue);
+}
+
+.meal-macro-indicator {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.meal-products-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.meal-product-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 8px;
+  padding: 10px 14px;
+  border: 1px solid rgba(249, 115, 22, 0.05);
+  flex-wrap: wrap;
+}
+
+.mp-details {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 180px;
+}
+
+.mp-name {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.mp-base-macros {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.mp-inputs {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.weight-input-container {
+  display: flex;
+  align-items: center;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--card-border);
+  border-radius: 6px;
+  padding-right: 8px;
+}
+
+.weight-input {
+  width: 60px;
+  border: none;
+  background: transparent;
+  padding: 6px 4px 6px 10px;
+  text-align: right;
+  font-weight: bold;
+}
+
+.weight-input:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.unit-label {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  font-weight: bold;
+}
+
+.mp-calculated-kcal {
+  font-size: 0.85rem;
+  font-weight: 700;
+  min-width: 60px;
+  text-align: right;
+  color: var(--text-secondary);
+}
+
+.meal-empty-dropzone {
+  border: 1px dashed rgba(0, 0, 0, 0.08);
+  border-radius: 8px;
+  padding: 16px;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+/* --- WORKOUT BUILDER STYLES --- */
+.workout-summary-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 30px;
+  gap: 20px;
+  flex-wrap: wrap;
+  border-left: 4px solid var(--color-primary);
+  margin-bottom: 25px;
+}
+
+.workout-days-list {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.workout-day-card {
+  padding: 25px;
+}
+
+.workout-day-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--card-border);
+  padding-bottom: 12px;
+}
+
+.workout-day-title-input {
+  font-family: inherit;
+  font-size: 1.15rem;
+  font-weight: 800;
+  border: none;
+  background: transparent;
+  color: var(--text-primary);
+  border-bottom: 1px dashed var(--text-muted);
+  padding: 4px 0;
+  width: 250px;
+}
+
+.workout-day-title-input:focus {
+  outline: none;
+  border-bottom-color: var(--color-primary);
+}
+
+.day-actions {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.exercises-table-container {
+  overflow-x: auto;
+}
+
+.exercises-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.exercises-table th, .exercises-table td {
+  padding: 10px;
+  text-align: left;
+  vertical-align: middle;
+}
+
+.exercises-table th {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 700;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.inline-table-input {
+  width: 100%;
+  padding: 8px 12px;
+  font-size: 0.88rem;
+}
+
+.empty-dropzone-workout {
+  border: 1.5px dashed rgba(0, 0, 0, 0.08);
+  border-radius: 8px;
+  padding: 25px;
+  text-align: center;
+  cursor: pointer;
+  color: var(--text-muted);
+  transition: var(--transition-smooth);
+}
+
+.empty-dropzone-workout:hover {
+  border-color: var(--color-primary);
+  background: rgba(249, 115, 22, 0.04);
+  color: var(--text-primary);
+}
+
+/* --- MULTI DIET SELECTOR STYLES --- */
+.diet-selector-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px 25px;
+  margin-bottom: 25px;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.selector-left {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  flex-grow: 1;
+  max-width: 600px;
+}
+
+.select-label {
+  margin-bottom: 0;
+  white-space: nowrap;
+  font-weight: 700;
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+}
+
+.plan-select-dropdown {
+  min-width: 250px;
+  padding: 8px 12px;
+  font-weight: 600;
+  background: var(--bg-secondary);
+  border: 1px solid var(--card-border);
+}
+
+.selector-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.btn-danger-outline {
+  background: transparent;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: hsl(0, 84%, 60%);
+  padding: 8px 16px;
+  border-radius: var(--border-radius-sm);
+  cursor: pointer;
+  font-family: inherit;
+  font-weight: 600;
+  font-size: 0.85rem;
+  transition: var(--transition-smooth);
+}
+
+.btn-danger-outline:hover {
+  background: rgba(239, 68, 68, 0.08);
+  border-color: hsl(0, 84%, 60%);
+  transform: translateY(-1px);
+}
+
+.plan-title-row {
+  margin-bottom: 8px;
+}
+
+.plan-dates-row {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.date-input-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.date-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+}
+
+.plan-date-input {
+  padding: 6px 10px;
+  font-size: 0.85rem;
+  background: var(--bg-secondary);
+  border: 1px solid var(--card-border);
+  border-radius: var(--border-radius-sm);
+  color: var(--text-primary);
+  width: 140px;
+  font-weight: 500;
+}
+

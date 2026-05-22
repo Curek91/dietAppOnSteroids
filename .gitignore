@@ -1,0 +1,23 @@
+# IDE Configuration
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+
+# Maven / Java Build Outputs
+backend/target/
+backend/.mvn/
+backend/mvnw
+backend/mvnw.cmd
+
+# Angular / Node Build Outputs
+frontend/node_modules/
+frontend/dist/
+frontend/.angular/
+frontend/.vscode/
+
+# OS Files
+Thumbs.db
+desktop.ini
+.DS_Store
