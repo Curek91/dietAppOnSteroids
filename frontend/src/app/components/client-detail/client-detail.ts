@@ -60,6 +60,8 @@ export class ClientDetail implements OnInit, OnDestroy {
   newProductCarbs = '';
 
   // Workout builder state
+  workoutPlans = signal<WorkoutPlan[]>([]);
+  selectedWorkoutPlanId = signal<number | null>(null);
   workoutPlan = signal<WorkoutPlan | null>(null);
 
   constructor(
@@ -106,7 +108,7 @@ export class ClientDetail implements OnInit, OnDestroy {
     this.loadDietPlan(id);
 
     // 4. Load workout plans
-    this.loadWorkoutPlan(id);
+    this.loadWorkoutPlans(id);
 
     // 5. Load products
     this.loadProducts();
@@ -538,28 +540,90 @@ export class ClientDetail implements OnInit, OnDestroy {
   }
 
   // --- WORKOUT BUILDER ---
-  loadWorkoutPlan(clientId: number): void {
+  loadWorkoutPlans(clientId: number): void {
     this.workoutService.getWorkoutPlansForClient(clientId).subscribe({
       next: (data) => {
+        this.workoutPlans.set(data || []);
         if (data && data.length > 0) {
-          this.workoutPlan.set(data[0]);
+          // Find currently active plan based on dates, or default to the first one
+          const todayStr = new Date().toISOString().split('T')[0];
+          const activePlan = data.find(p => {
+            if (!p.startDate || !p.endDate) return false;
+            return p.startDate <= todayStr && p.endDate >= todayStr;
+          }) || data[0];
+
+          this.selectedWorkoutPlanId.set(activePlan.id || null);
+          this.workoutPlan.set(JSON.parse(JSON.stringify(activePlan))); // deep copy
         } else {
-          // Initialize empty plan with one day
-          this.workoutPlan.set({
-            name: 'Ogólny Plan Treningowy',
-            notes: 'Pamiętaj o rozgrzewce przed każdą sesją oraz rozciąganiu po treningu.',
-            days: [
-              {
-                dayName: 'Dzień 1 - Całe ciało (FBW)',
-                orderNum: 0,
-                exercises: []
-              }
-            ]
-          });
+          this.createNewWorkoutPlan();
         }
       },
       error: (err) => console.error('Error loading workout plans', err)
     });
+  }
+
+  selectWorkoutPlan(id: any): void {
+    const numericId = id ? +id : null;
+    this.selectedWorkoutPlanId.set(numericId);
+    
+    const plan = this.workoutPlans().find(p => p.id === numericId || (!p.id && numericId === null));
+    if (plan) {
+      this.workoutPlan.set(JSON.parse(JSON.stringify(plan)));
+    }
+  }
+
+  createNewWorkoutPlan(): void {
+    const newPlan: WorkoutPlan = {
+      name: 'Nowy Plan Treningowy',
+      notes: 'Pamiętaj o rozgrzewce przed każdą sesją oraz rozciąganiu po treningu.',
+      startDate: '',
+      endDate: '',
+      days: [
+        {
+          dayName: 'Dzień 1 - Całe ciało (FBW)',
+          orderNum: 0,
+          exercises: []
+        }
+      ]
+    };
+
+    const currentPlans = this.workoutPlans();
+    const unsavedExists = currentPlans.some(p => !p.id);
+    if (!unsavedExists) {
+      this.workoutPlans.set([...currentPlans, newPlan]);
+    }
+    
+    this.selectedWorkoutPlanId.set(null);
+    this.workoutPlan.set(newPlan);
+  }
+
+  deleteActiveWorkoutPlan(): void {
+    const plan = this.workoutPlan();
+    if (!plan) return;
+
+    if (plan.id) {
+      if (confirm(`Czy na pewno chcesz trwale usunąć plan treningowy "${plan.name}"?`)) {
+        this.workoutService.deleteWorkoutPlan(plan.id).subscribe({
+          next: () => {
+            alert('Plan treningowy został pomyślnie usunięty.');
+            this.loadWorkoutPlans(this.clientId());
+          },
+          error: (err) => {
+            console.error('Error deleting workout plan', err);
+            alert('Wystąpił błąd podczas usuwania planu treningowego.');
+          }
+        });
+      }
+    } else {
+      const updated = this.workoutPlans().filter(p => p.id);
+      this.workoutPlans.set(updated);
+      if (updated.length > 0) {
+        this.selectWorkoutPlan(updated[0].id);
+      } else {
+        this.workoutPlan.set(null);
+        this.selectedWorkoutPlanId.set(null);
+      }
+    }
   }
 
   addWorkoutDay(): void {
@@ -615,8 +679,8 @@ export class ClientDetail implements OnInit, OnDestroy {
 
     this.workoutService.saveWorkoutPlan(this.clientId(), plan).subscribe({
       next: (savedPlan) => {
-        this.workoutPlan.set(savedPlan);
         alert('Plan treningowy został pomyślnie zapisany!');
+        this.loadWorkoutPlans(this.clientId());
       },
       error: (err) => {
         console.error('Error saving workout plan', err);

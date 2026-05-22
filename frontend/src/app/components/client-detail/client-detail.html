@@ -390,13 +390,42 @@
 
   <!-- 4. WORKOUT TAB -->
   <section class="tab-pane animate-fade" *ngIf="activeTab() === 'workout'">
+    <!-- Workout Selector Bar -->
+    <div class="glass-card diet-selector-bar animate-fade" *ngIf="workoutPlans().length > 0">
+      <div class="selector-left">
+        <label class="form-label select-label">Wybierz plan treningowy:</label>
+        <select [ngModel]="selectedWorkoutPlanId()" (ngModelChange)="selectWorkoutPlan($event)" class="form-input plan-select-dropdown">
+          <option *ngFor="let plan of workoutPlans()" [value]="plan.id">
+            {{ plan.name }} {{ plan.startDate && plan.endDate ? '(' + plan.startDate + ' - ' + plan.endDate + ')' : '' }}
+          </option>
+        </select>
+      </div>
+      <div class="selector-right">
+        <button class="btn btn-secondary btn-sm" (click)="createNewWorkoutPlan()">
+          + Nowy Plan Treningowy
+        </button>
+        <button class="btn btn-danger-outline btn-sm" *ngIf="workoutPlan()?.id" (click)="deleteActiveWorkoutPlan()">
+          Usuń ten plan
+        </button>
+      </div>
+    </div>
+
     <div class="workout-plan-layout" *ngIf="workoutPlan()">
       <div class="glass-card workout-summary-bar">
         <div class="summary-meta">
-          <div class="form-group" style="margin-bottom: 0;">
+          <div class="plan-title-row">
             <input type="text" [(ngModel)]="workoutPlan()!.name" class="form-input plan-name-input" placeholder="Nazwa planu treningowego..." />
           </div>
-          <p class="plan-subtitle">Rozpisany Trening Siłowy</p>
+          <div class="plan-dates-row">
+            <div class="date-input-group">
+              <span class="date-label">Od:</span>
+              <input type="date" [(ngModel)]="workoutPlan()!.startDate" class="form-input plan-date-input" />
+            </div>
+            <div class="date-input-group">
+              <span class="date-label">Do:</span>
+              <input type="date" [(ngModel)]="workoutPlan()!.endDate" class="form-input plan-date-input" />
+            </div>
+          </div>
         </div>
         
         <div class="summary-actions">
