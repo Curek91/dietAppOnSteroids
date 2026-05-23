@@ -1,0 +1,93 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI";
+  --font-display: "Sora", "Inter", ui-sans-serif, system-ui;
+  color-scheme: light;
+}
+
+html, body {
+  background: #fafaf9;
+  color: #0f172a;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  background-image:
+    radial-gradient(at 0% 0%, rgba(254, 215, 170, 0.45) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(253, 186, 116, 0.3) 0px, transparent 45%),
+    radial-gradient(at 100% 100%, rgba(251, 146, 60, 0.18) 0px, transparent 50%),
+    radial-gradient(at 0% 100%, rgba(255, 237, 213, 0.4) 0px, transparent 50%);
+  background-attachment: fixed;
+  min-height: 100vh;
+}
+
+@layer components {
+  .glass {
+    @apply bg-white/65 backdrop-blur-xl border border-white/60 shadow-glass;
+  }
+  .glass-strong {
+    @apply bg-white/80 backdrop-blur-2xl border border-white/70 shadow-glass;
+  }
+  .card {
+    @apply rounded-2xl glass p-6 transition-all duration-300 hover:shadow-soft;
+  }
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-400 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  .btn-primary {
+    @apply btn bg-gradient-to-br from-brand-500 to-brand-600 text-white px-5 py-2.5 shadow-glow hover:from-brand-600 hover:to-brand-700 hover:-translate-y-0.5 active:translate-y-0;
+  }
+  .btn-ghost {
+    @apply btn bg-white/60 text-ink-700 px-4 py-2 hover:bg-white border border-white/80;
+  }
+  .btn-outline {
+    @apply btn border border-ink-200 text-ink-700 px-4 py-2 hover:bg-white/70;
+  }
+  .input {
+    @apply w-full rounded-xl bg-white/70 border border-ink-200/80 px-4 py-2.5 text-ink-900 placeholder-ink-400 focus:outline-none focus:ring-2 focus:ring-brand-400/60 focus:border-brand-400 transition;
+  }
+  .label {
+    @apply text-xs font-medium uppercase tracking-wider text-ink-500 mb-1.5 block;
+  }
+  .chip {
+    @apply inline-flex items-center gap-1.5 rounded-full bg-white/70 border border-ink-200/60 px-3 py-1 text-xs font-medium text-ink-700;
+  }
+  .chip-brand {
+    @apply chip bg-brand-50 border-brand-200 text-brand-700;
+  }
+  .chip-success {
+    @apply chip bg-emerald-50 border-emerald-200 text-emerald-700;
+  }
+  .stat-value {
+    @apply font-display text-3xl font-semibold tracking-tight text-ink-900;
+  }
+  .stat-label {
+    @apply text-xs uppercase tracking-wider text-ink-500 font-medium;
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    @apply bg-gradient-to-br from-brand-600 via-brand-500 to-amber-500 bg-clip-text text-transparent;
+  }
+  .ring-gradient {
+    background: linear-gradient(white, white) padding-box,
+      linear-gradient(135deg, #fb923c, #f97316, #fbbf24) border-box;
+    border: 1px solid transparent;
+  }
+  .scrollbar-thin::-webkit-scrollbar { width: 6px; height: 6px; }
+  .scrollbar-thin::-webkit-scrollbar-thumb { background: rgba(148,163,184,0.4); border-radius: 999px; }
+  .scrollbar-thin::-webkit-scrollbar-track { background: transparent; }
+}
+
+/* keep focus visible accessible */
+*:focus-visible {
+  outline: 2px solid rgba(249,115,22,0.5);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
