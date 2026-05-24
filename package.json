@@ -1,0 +1,19 @@
+{
+  "name": "dietapp-monorepo",
+  "version": "0.1.0",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "web:dev": "npm --workspace @dietapp/web run dev",
+    "web:build": "npm --workspace @dietapp/web run build",
+    "web:typecheck": "npm --workspace @dietapp/web run typecheck",
+    "mobile:start": "npm --workspace @dietapp/mobile run start",
+    "mobile:ios": "npm --workspace @dietapp/mobile run ios",
+    "mobile:android": "npm --workspace @dietapp/mobile run android",
+    "core:typecheck": "npm --workspace @dietapp/core run typecheck",
+    "typecheck": "npm run core:typecheck && npm run web:typecheck"
+  }
+}

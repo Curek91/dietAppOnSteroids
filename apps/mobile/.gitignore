@@ -1,0 +1,12 @@
+node_modules/
+.expo/
+dist/
+web-build/
+.expo-shared/
+*.log
+.env*
+.DS_Store
+
+# Native build outputs (only created when we eject)
+ios/
+android/

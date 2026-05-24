@@ -11,13 +11,36 @@ backend/.mvn/
 backend/mvnw
 backend/mvnw.cmd
 
-# Angular / Node Build Outputs
-frontend/node_modules/
+# Node — root + all workspaces
+node_modules/
+**/node_modules/
+
+# Next.js (apps/web)
+apps/web/.next/
+apps/web/out/
+apps/web/.vercel/
+apps/web/*.tsbuildinfo
+
+# Expo (apps/mobile)
+apps/mobile/.expo/
+apps/mobile/dist/
+apps/mobile/web-build/
+apps/mobile/.expo-shared/
+apps/mobile/ios/
+apps/mobile/android/
+
+# Legacy Angular frontend
 frontend/dist/
 frontend/.angular/
-frontend/.vscode/
 
-# OS Files
+# Logs / env / OS
+*.log
+.env
+.env.local
+.env.*.local
 Thumbs.db
 desktop.ini
 .DS_Store
+
+# Claude Code local config (per-user, not shared)
+.claude/

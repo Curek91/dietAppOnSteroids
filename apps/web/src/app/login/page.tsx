@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { ArrowRight, Lock, User as UserIcon, Sparkles, ShieldCheck, Zap } from "lucide-react";
 import { Logo } from "@/components/Logo";
 import { useApp } from "@/lib/store";
@@ -51,36 +52,36 @@ export default function LoginPage() {
             "radial-gradient(circle at 20% 20%, rgba(255,255,255,0.4) 0px, transparent 40%), radial-gradient(circle at 80% 80%, rgba(255,200,150,0.4) 0px, transparent 40%)"
         }} />
         <div className="relative z-10">
-          <div className="inline-flex items-center gap-2.5 text-white">
+          <Link href="/" className="inline-flex items-center gap-2.5 text-white">
             <div className="h-9 w-9 rounded-xl bg-white/20 backdrop-blur flex items-center justify-center ring-1 ring-white/30">
               <Sparkles className="h-5 w-5" />
             </div>
             <div>
               <div className="font-display text-lg font-semibold tracking-tight">DietApp</div>
-              <div className="text-[10px] uppercase tracking-[0.18em] text-white/70 -mt-0.5">Coach OS</div>
+              <div className="text-[10px] uppercase tracking-[0.18em] text-white/70 -mt-0.5">Dla trenerów</div>
             </div>
-          </div>
+          </Link>
         </div>
         <div className="relative z-10 max-w-md">
           <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/15 backdrop-blur text-white text-xs font-semibold tracking-wider uppercase mb-5 border border-white/20">
-            <Sparkles className="h-3 w-3" /> AI Coach · Wearables · Vision
+            <Sparkles className="h-3 w-3" /> Web · iOS · Android
           </span>
           <h1 className="font-display text-5xl font-semibold text-white tracking-tight leading-[1.05]">
-            Trening, dieta<br/>i regeneracja.<br/>
-            <span className="text-amber-200">Z AI w tle.</span>
+            Prowadź klientów.<br/>
+            <span className="text-amber-200">Nie tabelki.</span>
           </h1>
           <p className="mt-6 text-white/85 text-lg leading-relaxed">
-            Trener prowadzi do 5 podopiecznych. AI analizuje zdjęcia posiłków, łączy z Apple Watch / Whoop / Garmin
-            i podpowiada zmiany w czasie rzeczywistym. 100 PLN/mc.
+            Diety, treningi, pomiary i AI-coach w jednej aplikacji. Twoi klienci dostają
+            wersję z Twoim logo. Ty odzyskujesz wieczory.
           </p>
           <div className="mt-10 grid grid-cols-3 gap-3 text-white/90">
-            <Feature icon={<Sparkles className="h-4 w-4" />} label="AI Vision Coach" />
-            <Feature icon={<Zap className="h-4 w-4" />} label="Wearables sync" />
-            <Feature icon={<ShieldCheck className="h-4 w-4" />} label="90% marża" />
+            <Feature icon={<Sparkles className="h-4 w-4" />} label="AI w planach diet" />
+            <Feature icon={<Zap className="h-4 w-4" />} label="Smartwatch synca" />
+            <Feature icon={<ShieldCheck className="h-4 w-4" />} label="RODO, dane w UE" />
           </div>
         </div>
         <div className="relative z-10 text-white/70 text-xs">
-          © 2026 DietApp · v0.1.0
+          © 2026 DietApp
         </div>
       </aside>
 

@@ -20,7 +20,7 @@ export function Logo({ className, compact = false }: { className?: string; compa
             Diet<span className="text-gradient">App</span>
           </div>
           <div className="text-[10px] uppercase tracking-[0.18em] text-ink-500 -mt-0.5">
-            Coach OS
+            Dla trenerów
           </div>
         </div>
       )}
