@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Salad } from "lucide-react";
+import { Salad, ChefHat, Clock } from "lucide-react";
 import { useApp } from "@/lib/store";
 import { macrosForMeal, macrosForPlan, macrosForItem, round } from "@/lib/macros";
 import { MacrosBar } from "@/components/MacrosBar";
@@ -93,6 +93,46 @@ export default function ClientDietPage() {
                       <li className="text-center text-sm text-ink-500 py-3">Pusty posiłek</li>
                     )}
                   </ul>
+
+                  {meal.recipe && (
+                    <details className="mt-4 group rounded-2xl bg-gradient-to-br from-brand-50/80 to-amber-50/60 border border-brand-200/70 open:shadow-soft transition">
+                      <summary className="cursor-pointer list-none flex items-center justify-between px-4 py-3">
+                        <div className="flex items-center gap-2.5">
+                          <span className="h-8 w-8 rounded-xl bg-white shadow-soft flex items-center justify-center">
+                            <ChefHat className="h-4 w-4 text-brand-600" />
+                          </span>
+                          <div>
+                            <div className="text-sm font-semibold text-ink-900 leading-tight">
+                              Jak to przyrządzić
+                            </div>
+                            {meal.recipe.prepTimeMinutes && (
+                              <div className="text-[11px] text-ink-500 flex items-center gap-1 mt-0.5">
+                                <Clock className="h-3 w-3" /> {meal.recipe.prepTimeMinutes} min
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                        <span className="text-[11px] uppercase tracking-wider font-semibold text-brand-700 group-open:opacity-0 transition">
+                          Pokaż
+                        </span>
+                      </summary>
+                      <div className="px-4 pb-4 pt-1 space-y-3">
+                        {meal.recipe.note && (
+                          <p className="text-sm text-ink-700 italic">"{meal.recipe.note}"</p>
+                        )}
+                        <ol className="space-y-2 text-sm text-ink-800">
+                          {meal.recipe.steps.map((step, i) => (
+                            <li key={i} className="flex gap-3">
+                              <span className="shrink-0 h-6 w-6 rounded-lg bg-white shadow-soft text-brand-700 text-xs font-bold flex items-center justify-center">
+                                {i + 1}
+                              </span>
+                              <span className="leading-relaxed">{step}</span>
+                            </li>
+                          ))}
+                        </ol>
+                      </div>
+                    </details>
+                  )}
                 </div>
               );
             })}

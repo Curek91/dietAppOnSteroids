@@ -54,10 +54,19 @@ export interface MealItem {
   grams: number;
 }
 
+export interface MealRecipe {
+  steps: string[];
+  prepTimeMinutes?: number;
+  note?: string;
+  updatedAt?: string;
+}
+
 export interface Meal {
   id: string;
   name: string;
   items: MealItem[];
+  /** Optional preparation recipe attached to this meal by the trainer. */
+  recipe?: MealRecipe;
 }
 
 export interface DietPlan {
@@ -102,6 +111,37 @@ export interface Macros {
   protein: number;
   fat: number;
   carbs: number;
+}
+
+// ─── Meal exchanges (Wymiany posiłków) ────────────────────────────
+// Unifies three coaching flows around food:
+//   - swap_request    — client asks to replace planned meal items with alternatives
+//   - pre_approval    — client declares what they will eat today, trainer confirms upfront
+//   - trainer_recipe  — trainer attaches a recipe/preparation guide to a meal in a plan
+export type MealProposalKind = "swap_request" | "pre_approval" | "trainer_recipe";
+export type MealProposalStatus = "pending" | "approved" | "rejected" | "counter";
+
+export interface MealProposal {
+  id: string;
+  clientId: string;
+  trainerId: string;
+  dietPlanId: string;
+  mealId: string;
+  mealName: string;
+  date: string;            // YYYY-MM-DD this proposal targets
+  kind: MealProposalKind;
+  // What client/trainer proposed instead (or the recipe ingredients)
+  proposedItems: MealItem[];
+  // Optional cooking steps for trainer_recipe; client may also fill for context
+  recipeSteps?: string[];
+  prepTimeMinutes?: number;
+  note?: string;           // why client wants the swap / pre-approval context / recipe note
+  status: MealProposalStatus;
+  trainerComment?: string; // trainer's reply when responding
+  // For counter-proposals from trainer
+  counterItems?: MealItem[];
+  createdAt: string;
+  respondedAt?: string;
 }
 
 // ─── Meal photo proofs ────────────────────────────────────────────
@@ -188,6 +228,12 @@ export interface PlanConfig {
   wearableSeats: number;
   features: string[];
   badge?: string;
+  /** One-line promise shown right under the plan name. Tells the story for this stage of business. */
+  subtitle?: string;
+  /** Tagline shown at the bottom of the pricing card: "Dla kogo jest ten plan". */
+  forWhom?: string;
+  /** Per-plan CTA label (instead of a generic "Wybierz plan"). */
+  ctaLabel?: string;
 }
 
 export interface Subscription {

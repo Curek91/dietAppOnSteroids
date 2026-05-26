@@ -3,6 +3,7 @@ import type {
   ClientProfile,
   DietPlan,
   MealPhoto,
+  MealProposal,
   ProgressEntry,
   Product,
   Subscription,
@@ -178,7 +179,16 @@ export const seedDietPlans: DietPlan[] = [
           { productId: "prod-5", grams: 60 },
           { productId: "prod-6", grams: 120 },
           { productId: "prod-8", grams: 150 }
-        ]
+        ],
+        recipe: {
+          prepTimeMinutes: 8,
+          note: "Najszybsze śniadanie redukcyjne — wszystko w jednej misce.",
+          steps: [
+            "Płatki owsiane zalej 200 ml gorącej wody lub mleka, odstaw na 3 min.",
+            "Banana pokrój w plasterki i wmieszaj do owsianki.",
+            "Na wierzch dodaj twaróg, posyp cynamonem do smaku."
+          ]
+        }
       },
       {
         id: "m-2",
@@ -187,7 +197,18 @@ export const seedDietPlans: DietPlan[] = [
           { productId: "prod-1", grams: 180 },
           { productId: "prod-2", grams: 70 },
           { productId: "prod-3", grams: 200 }
-        ]
+        ],
+        recipe: {
+          prepTimeMinutes: 25,
+          note: "Mój sprawdzony obiad redukcyjny — możesz robić go 3 dni z rzędu i dalej smakuje.",
+          steps: [
+            "Pokrój pierś na kawałki 2cm, marynuj w łyżce sosu sojowego + ząbku czosnku + szczypcie imbiru — 10 min.",
+            "Ryż wsyp do garnka, zalej zimną wodą (proporcja 1:2), gotuj 12 min pod przykryciem na małym ogniu.",
+            "Brokuł podziel na różyczki, blanszuj 3 min we wrzątku, odcedź.",
+            "Kurczak smaż 6–7 min na średnim ogniu na łyżeczce oleju, aż złocisty.",
+            "Podawaj kurczaka na ryżu, brokuł obok, polej oliwą do smaku."
+          ]
+        }
       },
       {
         id: "m-3",
@@ -196,7 +217,17 @@ export const seedDietPlans: DietPlan[] = [
           { productId: "prod-4", grams: 150 },
           { productId: "prod-11", grams: 150 },
           { productId: "prod-9", grams: 60 }
-        ]
+        ],
+        recipe: {
+          prepTimeMinutes: 30,
+          note: "Kolacja na ciepło — łosoś z piekarnika to game changer.",
+          steps: [
+            "Piekarnik nagrzej do 200°C.",
+            "Bataty pokrój w słupki, wymieszaj z odrobiną oliwy i soli, piecz 25 min.",
+            "Łososia ułóż obok batatów na ostatnie 12 min pieczenia.",
+            "Awokado pokrój w plasterki — podaj na świeżo obok łososia."
+          ]
+        }
       }
     ]
   },
@@ -216,7 +247,17 @@ export const seedDietPlans: DietPlan[] = [
           { productId: "prod-5", grams: 100 },
           { productId: "prod-7", grams: 150 },
           { productId: "prod-6", grams: 150 }
-        ]
+        ],
+        recipe: {
+          prepTimeMinutes: 12,
+          note: "Wysokokaloryczne śniadanie na masie — kalorie i białko jednym uderzeniem.",
+          steps: [
+            "Płatki owsiane zalej szklanką mleka, dodaj łyżkę masła orzechowego, ugotuj 4 min.",
+            "Jajka rozbij na patelnię, smaż 3 min na omlet (ewentualnie z odrobiną sera).",
+            "Banana pokrój w plasterki, dodaj na wierzch owsianki.",
+            "Wszystko podawaj razem — owsianka + omlet + banan na talerzu."
+          ]
+        }
       },
       {
         id: "m-5",
@@ -498,6 +539,120 @@ export const seedAIInsights: AIInsight[] = [
     body: "Średni sen 7h 28min (+18min vs poprzedni tydzień). Zostaw rytm — wspiera redukcję.",
     severity: "info",
     generatedAt: "2026-05-22T05:11:00Z"
+  }
+];
+
+// ─── Meal proposals (Wymiany posiłków) ────────────────────────────
+// Three flows in one stream: swap requests from clients, pre-approvals,
+// and trainer-attached recipes.
+export const seedMealProposals: MealProposal[] = [
+  {
+    id: "mp-prop-1",
+    clientId: "c-1",
+    trainerId: "u-trainer-1",
+    dietPlanId: "d-1",
+    mealId: "m-2",
+    mealName: "Obiad",
+    date: "2026-05-24",
+    kind: "swap_request",
+    proposedItems: [
+      { productId: "prod-4", grams: 180 }, // łosoś zamiast kurczaka
+      { productId: "prod-11", grams: 180 }, // bataty zamiast ryżu
+      { productId: "prod-3", grams: 200 }
+    ],
+    note: "Nie mam dziś kurczaka, mam łososia w lodówce. Zamienię ryż na bataty?",
+    status: "pending",
+    createdAt: "2026-05-24T10:14:00Z"
+  },
+  {
+    id: "mp-prop-2",
+    clientId: "c-2",
+    trainerId: "u-trainer-1",
+    dietPlanId: "d-2",
+    mealId: "m-4",
+    mealName: "Śniadanie",
+    date: "2026-05-23",
+    kind: "swap_request",
+    proposedItems: [
+      { productId: "prod-7", grams: 200 },
+      { productId: "prod-6", grams: 200 },
+      { productId: "prod-5", grams: 50 }
+    ],
+    note: "Mogę zrobić omlet bananowy z owsianki?",
+    status: "approved",
+    trainerComment: "Tak, kalorycznie spina się. Trzymaj porcje.",
+    respondedAt: "2026-05-23T07:25:00Z",
+    createdAt: "2026-05-23T07:08:00Z"
+  },
+  {
+    id: "mp-prop-3",
+    clientId: "c-1",
+    trainerId: "u-trainer-1",
+    dietPlanId: "d-1",
+    mealId: "m-3",
+    mealName: "Kolacja",
+    date: "2026-05-24",
+    kind: "pre_approval",
+    proposedItems: [
+      { productId: "prod-4", grams: 150 },
+      { productId: "prod-11", grams: 150 },
+      { productId: "prod-9", grams: 60 }
+    ],
+    note: "Zrobię dokładnie jak w planie — chcę mieć pewność, że ok przed kupnem.",
+    status: "approved",
+    trainerComment: "Idealnie. Tak trzymaj.",
+    respondedAt: "2026-05-24T11:02:00Z",
+    createdAt: "2026-05-24T10:55:00Z"
+  },
+  {
+    id: "mp-prop-4",
+    clientId: "c-3",
+    trainerId: "u-trainer-1",
+    dietPlanId: "d-2",
+    mealId: "m-5",
+    mealName: "Obiad",
+    date: "2026-05-22",
+    kind: "swap_request",
+    proposedItems: [
+      { productId: "prod-2", grams: 200 },
+      { productId: "prod-14", grams: 200 }
+    ],
+    note: "Wczoraj był ciężki dzień, mogę zjeść pizzę? Albo coś prostszego.",
+    status: "counter",
+    counterItems: [
+      { productId: "prod-1", grams: 150 },
+      { productId: "prod-2", grams: 100 },
+      { productId: "prod-14", grams: 200 }
+    ],
+    trainerComment: "Pizza ciężka. Daję contropozycję: szybki ryż z kurczakiem i pomidorami. 15 min roboty.",
+    respondedAt: "2026-05-22T13:40:00Z",
+    createdAt: "2026-05-22T12:48:00Z"
+  },
+  {
+    id: "mp-prop-5",
+    clientId: "c-1",
+    trainerId: "u-trainer-1",
+    dietPlanId: "d-1",
+    mealId: "m-2",
+    mealName: "Obiad — przepis trenera",
+    date: "2026-05-20",
+    kind: "trainer_recipe",
+    proposedItems: [
+      { productId: "prod-1", grams: 180 },
+      { productId: "prod-2", grams: 70 },
+      { productId: "prod-3", grams: 200 }
+    ],
+    recipeSteps: [
+      "Pokrój pierś na kawałki, marynuj w 1 łyżce sosu sojowego, czosnku, imbiru — 10 min.",
+      "Ryż gotuj 12 min w lekko osolonej wodzie z kroplą oleju.",
+      "Brokuł blanszuj 3 min, potem podsmaż 2 min na patelni z czosnkiem.",
+      "Kurczak smaż 6–7 min na średnim ogniu, podawaj z brokułem i ryżem."
+    ],
+    prepTimeMinutes: 25,
+    note: "Mój sprawdzony obiad redukcyjny — szybki, smaczny, taki sam każdego dnia.",
+    status: "approved",
+    createdAt: "2026-05-20T09:00:00Z",
+    respondedAt: "2026-05-20T09:00:00Z"
   }
 ];
 

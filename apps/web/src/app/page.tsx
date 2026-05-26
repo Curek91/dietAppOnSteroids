@@ -5,20 +5,23 @@ import {
   Sparkles,
   CheckCircle2,
   Heart,
-  Apple,
-  Smartphone,
+  Globe,
   ShieldCheck,
   Camera,
   Activity,
   Salad,
   Watch,
   Paintbrush,
-  LineChart
+  LineChart,
+  Repeat,
+  Bell,
+  Bot,
+  Users
 } from "lucide-react";
 import { copy, DEFAULT_LOCALE } from "@/lib/i18n/copy";
 import { PLANS } from "@/lib/plans";
 import { MarketingNav } from "@/components/landing/MarketingNav";
-import { PhoneMockup } from "@/components/landing/PhoneMockup";
+import { DashboardMockup } from "@/components/landing/DashboardMockup";
 import { FaqAccordion } from "@/components/landing/FaqAccordion";
 
 const t = copy[DEFAULT_LOCALE];
@@ -51,7 +54,7 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true }
 };
 
-const featureIcons = [Salad, Activity, Camera, Watch, LineChart, Paintbrush];
+const featureIcons = [Users, Bell, Bot, Salad, Repeat, Camera, Paintbrush];
 
 export default function LandingPage() {
   return (
@@ -111,7 +114,7 @@ function Hero() {
 
           <ul className="mt-8 grid sm:grid-cols-3 gap-3 text-sm text-ink-700">
             <Check>14 dni bez karty</Check>
-            <Check>iOS · Android · web</Check>
+            <Check>Działa w przeglądarce</Check>
             <Check>Faktura VAT, anuluj kiedy chcesz</Check>
           </ul>
 
@@ -119,7 +122,7 @@ function Hero() {
         </div>
 
         <div className="relative">
-          <PhoneMockup />
+          <DashboardMockup />
         </div>
       </div>
     </section>
@@ -271,6 +274,12 @@ function Pricing() {
         <div className="mt-12 grid md:grid-cols-3 gap-4 items-stretch">
           {PLANS.map((p) => {
             const featured = p.tier === "studio";
+            const clientLine =
+              p.tier === "agency"
+                ? "Multi-seat dla zespołu"
+                : p.clientSlots >= 9999
+                ? "Klienci bez limitu"
+                : `Do ${p.clientSlots} klientów`;
             return (
               <div
                 key={p.tier}
@@ -280,53 +289,95 @@ function Pricing() {
                     : "glass-strong text-ink-900"
                 }`}
               >
-                {featured && (
-                  <span className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full bg-white text-brand-600 text-[11px] font-semibold tracking-wider uppercase shadow-soft">
-                    {p.badge ?? "Najpopularniejszy"}
+                {featured && p.badge && (
+                  <span className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full bg-white text-brand-600 text-[11px] font-semibold tracking-wider uppercase shadow-soft whitespace-nowrap max-w-[90%] text-center">
+                    {p.badge}
                   </span>
                 )}
-                <div className={`text-xs uppercase tracking-[0.16em] font-semibold ${featured ? "text-white/85" : "text-brand-600"}`}>
+
+                <div
+                  className={`text-xs uppercase tracking-[0.16em] font-semibold ${
+                    featured ? "text-white/85" : "text-brand-600"
+                  }`}
+                >
                   {p.name}
                 </div>
-                <div className="mt-3 flex items-baseline gap-2">
-                  <span className={`font-display text-5xl font-semibold tracking-tight ${featured ? "text-white" : "text-ink-900"}`}>
+
+                {p.subtitle && (
+                  <p
+                    className={`mt-2 text-sm leading-snug ${
+                      featured ? "text-white/90" : "text-ink-700"
+                    }`}
+                  >
+                    {p.subtitle}
+                  </p>
+                )}
+
+                <div className="mt-5 flex items-baseline gap-2">
+                  <span
+                    className={`font-display text-5xl font-semibold tracking-tight ${
+                      featured ? "text-white" : "text-ink-900"
+                    }`}
+                  >
                     {p.priceMonthly}
                   </span>
-                  <span className={featured ? "text-white/85 text-sm" : "text-ink-500 text-sm"}>
+                  <span
+                    className={featured ? "text-white/85 text-sm" : "text-ink-500 text-sm"}
+                  >
                     {t.pricing.perMonth}
                   </span>
                 </div>
-                <div className={`mt-1 text-sm ${featured ? "text-white/80" : "text-ink-500"}`}>
-                  do {p.clientSlots} podopiecznych
+
+                <div
+                  className={`mt-1 text-sm font-semibold ${
+                    featured ? "text-white" : "text-ink-900"
+                  }`}
+                >
+                  {clientLine}
+                </div>
+                <div
+                  className={`text-[11px] uppercase tracking-wider mt-0.5 ${
+                    featured ? "text-white/70" : "text-ink-400"
+                  }`}
+                >
+                  {p.aiRequestsMonthly.toLocaleString("pl-PL")} zapytań AI / mc
                 </div>
 
-                <ul className="mt-6 space-y-2.5 text-sm">
+                <ul className="mt-6 space-y-2.5 text-sm flex-1">
                   {p.features.map((line) => (
                     <li key={line} className="flex gap-2.5">
                       <CheckCircle2
-                        className={`h-4 w-4 mt-0.5 shrink-0 ${featured ? "text-white" : "text-emerald-600"}`}
+                        className={`h-4 w-4 mt-0.5 shrink-0 ${
+                          featured ? "text-white" : "text-emerald-600"
+                        }`}
                       />
-                      <span className={featured ? "text-white/95" : "text-ink-700"}>{line}</span>
+                      <span className={featured ? "text-white/95" : "text-ink-700"}>
+                        {line}
+                      </span>
                     </li>
                   ))}
                 </ul>
 
-                <Link
-                  href="/login"
-                  className={`mt-auto pt-8 ${
-                    featured
-                      ? "[&>span]:bg-white [&>span]:text-brand-700 [&>span]:shadow-soft"
-                      : ""
-                  }`}
-                >
+                {p.forWhom && (
+                  <p
+                    className={`mt-6 text-xs italic leading-relaxed ${
+                      featured ? "text-white/80" : "text-ink-500"
+                    }`}
+                  >
+                    {p.forWhom}
+                  </p>
+                )}
+
+                <Link href="/login" className="mt-5 block">
                   <span
-                    className={`inline-flex w-full justify-center items-center gap-2 rounded-xl px-5 py-3 font-medium transition-all ${
+                    className={`inline-flex w-full justify-center items-center gap-2 rounded-xl px-5 py-3 font-medium text-sm transition-all leading-tight text-center ${
                       featured
-                        ? "bg-white text-brand-700 hover:-translate-y-0.5"
+                        ? "bg-white text-brand-700 hover:-translate-y-0.5 shadow-soft"
                         : "btn-primary"
                     }`}
                   >
-                    {t.pricing.cta} <ArrowRight className="h-4 w-4" />
+                    {p.ctaLabel ?? t.pricing.cta}
+                    <ArrowRight className="h-4 w-4 shrink-0" />
                   </span>
                 </Link>
               </div>
@@ -334,7 +385,15 @@ function Pricing() {
           })}
         </div>
 
-        <p className="mt-6 text-center text-sm text-ink-600">{t.pricing.note}</p>
+        <div className="mt-10 max-w-3xl mx-auto rounded-2xl border border-white/70 bg-white/70 backdrop-blur-xl px-6 py-5 text-center shadow-soft">
+          <p className="text-sm text-ink-700">
+            <span className="text-brand-600 font-semibold">Trenerzy przechodzący z Excela i WhatsAppa</span>{" "}
+            odzyskują średnio <span className="font-semibold">5–10h tygodniowo</span>.
+            Pierwszy zatrzymany klient pokrywa rok subskrypcji.
+          </p>
+        </div>
+
+        <p className="mt-4 text-center text-sm text-ink-600">{t.pricing.note}</p>
       </div>
     </section>
   );
@@ -388,7 +447,7 @@ function FinalCta() {
             </div>
             <div className="mt-8 flex flex-wrap gap-x-6 gap-y-2 text-sm text-white/85">
               <span className="inline-flex items-center gap-1.5">
-                <Smartphone className="h-4 w-4" /> iOS · Android
+                <Globe className="h-4 w-4" /> Działa w przeglądarce
               </span>
               <span className="inline-flex items-center gap-1.5">
                 <ShieldCheck className="h-4 w-4" /> Dane w UE, RODO
@@ -438,7 +497,7 @@ function Footer() {
         <div className="max-w-6xl mx-auto px-5 lg:px-8 py-5 text-xs text-ink-500 flex flex-col sm:flex-row gap-2 sm:items-center sm:justify-between">
           <span>{t.footer.legal}</span>
           <span className="inline-flex items-center gap-1.5">
-            <Apple className="h-3.5 w-3.5" /> Aplikacja na iOS i Android
+            <Globe className="h-3.5 w-3.5" /> Działa w przeglądarce
           </span>
         </div>
       </div>
@@ -464,7 +523,7 @@ function JsonLd() {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
     name: "DietApp",
-    operatingSystem: "Web, iOS, Android",
+    operatingSystem: "Web",
     applicationCategory: "HealthApplication",
     description: t.meta.description,
     offers: PLANS.map((p) => ({

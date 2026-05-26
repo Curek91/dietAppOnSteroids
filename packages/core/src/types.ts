@@ -57,10 +57,18 @@ export interface MealItem {
   grams: number;
 }
 
+export interface MealRecipe {
+  steps: string[];
+  prepTimeMinutes?: number;
+  note?: string;
+  updatedAt?: string;
+}
+
 export interface Meal {
   id: string;
   name: string;
   items: MealItem[];
+  recipe?: MealRecipe;
 }
 
 export interface DietPlan {

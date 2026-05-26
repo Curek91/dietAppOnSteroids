@@ -64,7 +64,7 @@ export default function LoginPage() {
         </div>
         <div className="relative z-10 max-w-md">
           <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/15 backdrop-blur text-white text-xs font-semibold tracking-wider uppercase mb-5 border border-white/20">
-            <Sparkles className="h-3 w-3" /> Web · iOS · Android
+            <Sparkles className="h-3 w-3" /> Aplikacja webowa
           </span>
           <h1 className="font-display text-5xl font-semibold text-white tracking-tight leading-[1.05]">
             Prowadź klientów.<br/>

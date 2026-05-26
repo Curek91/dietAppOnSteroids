@@ -81,7 +81,7 @@ const pl: MarketingCopy = {
   meta: {
     title: "DietApp — aplikacja dla trenerów personalnych i ich klientów",
     description:
-      "Prowadź klientów, nie tabelki. Diety, treningi, postępy i AI-coach w jednej aplikacji. Web, iOS i Android. Wypróbuj za darmo.",
+      "Obsłuż 2× więcej klientów bez chaosu. Zamień WhatsApp, Excel i PDF-y w jeden system. Plany, check-iny, zdjęcia, AI-asystent. 99 PLN/mc, 14 dni za darmo.",
     ogAlt: "DietApp — aplikacja dla trenerów personalnych",
     keywords: [
       "aplikacja dla trenera personalnego",
@@ -93,7 +93,10 @@ const pl: MarketingCopy = {
       "plan diety online",
       "trener dietetyk app",
       "fitness CRM",
-      "aplikacja do prowadzenia podopiecznych"
+      "aplikacja do prowadzenia podopiecznych",
+      "system dla trenera",
+      "online coaching software",
+      "import klientów z excela"
     ]
   },
   nav: {
@@ -104,75 +107,80 @@ const pl: MarketingCopy = {
     cta: "Wypróbuj za darmo"
   },
   hero: {
-    badge: "Web · iOS · Android",
+    badge: "Aplikacja webowa",
     h1Top: "Prowadź klientów.",
     h1Accent: "Nie tabelki.",
     h1Bottom: "",
     sub:
-      "Diety, treningi, pomiary, zdjęcia posiłków i AI-coach — w jednym miejscu, na każdym urządzeniu. Twoi podopieczni dostają aplikację z Twoim logo. Ty odzyskujesz wieczory.",
-    ctaPrimary: "Wypróbuj za darmo",
+      "Zamień WhatsApp, Excel i PDF-y w jeden system. Onboarding klientów, plany, check-iny, zdjęcia postępu i AI-asystent — w jednym miejscu. 99 PLN/mc, pierwszy zatrzymany klient pokrywa rok subskrypcji.",
+    ctaPrimary: "Wypróbuj za darmo · 14 dni",
     ctaSecondary: "Zobacz, jak to działa",
-    proof: "Dziesiątki trenerów w Polsce pracują już w jednym narzędziu zamiast pięciu."
+    proof: "Trenerzy odzyskują 5–10h tygodniowo, które wcześniej szły na administrację."
   },
   logos: {
     label: "Łączymy się z urządzeniami, których używają Twoi klienci",
     items: ["Apple Watch", "Garmin", "Whoop", "Oura", "Samsung Health", "Polar"]
   },
   outcomes: {
-    title: "To, co naprawdę zmienia się po przejściu na DietApp",
-    sub: "Nie obiecujemy „rewolucji w branży”. Pokazujemy, co policzyliśmy u trenerów, którzy z nami pracują.",
+    title: "Co realnie zmienia się po przejściu na DietApp",
+    sub: "Nie obiecujemy „rewolucji w branży”. Pokazujemy konkretne liczby od trenerów, którzy z nami pracują.",
     cards: [
       {
-        kpi: "6 h",
-        label: "tygodniowo dla Ciebie",
-        note: "Mniej kopiowania planów, więcej sesji."
+        kpi: "+1 klient",
+        label: "pokrywa rok subskrypcji",
+        note: "99 PLN/mc to nic, jeśli zatrzymasz choć jednego klienta więcej."
       },
       {
-        kpi: "3×",
-        label: "więcej kontaktu z klientem",
-        note: "Bo dzieje się to w jednej aplikacji, a nie w pięciu czatach."
+        kpi: "5–10 h",
+        label: "tygodniowo z powrotem",
+        note: "Mniej kopiowania planów i odpisywania ręcznie, więcej sesji."
       },
       {
-        kpi: "92%",
-        label: "klientów wraca w drugim miesiącu",
-        note: "Aplikacja pokazuje im progres — sami widzą sens."
+        kpi: "2×",
+        label: "więcej klientów bez zatrudniania",
+        note: "Skalujesz, bo aplikacja robi onboarding, check-iny i przypomnienia za Ciebie."
       }
     ]
   },
   features: {
     eyebrow: "Co jest w środku",
-    title: "Wszystko, co dotąd robiłeś w pięciu zakładkach",
-    sub: "Excel, WhatsApp, FitNotes, Trello, Notion — zostaje tylko jedna karta.",
+    title: "To, co naprawdę zabija Excel",
+    sub: "Onboarding, check-iny, progres, zdjęcia, płatności — przestają być Twoją robotą.",
     items: [
       {
-        title: "Plany diety, które klient otwiera w sekundę",
+        title: "Onboarding klienta w 5 minut",
         body:
-          "Twórz plan w 5 minut z bazą produktów lub pozwól AI ułożyć propozycję. Klient widzi listę zakupów, makro i przepisy bez instrukcji obsługi."
+          "Wyślij link, klient wypełnia ankietę, plan diety i treningu generuje się automatycznie. Import istniejących klientów z Excela albo Google Sheets."
       },
       {
-        title: "Treningi z wideo i historią serii",
+        title: "Check-iny i przypomnienia automatycznie",
         body:
-          "Każde ćwiczenie ma demonstrację, klient zaznacza wykonane serie, Ty widzisz postęp w czasie rzeczywistym."
+          "Cotygodniowe check-iny same się wysyłają. Klient odpowiada, AI streszcza, Ty widzisz jedno podsumowanie zamiast trzydziestu wiadomości."
       },
       {
-        title: "Zdjęcia posiłków + AI-weryfikacja",
+        title: "AI admin assistant",
         body:
-          "Klient robi zdjęcie talerza, AI rozpoznaje produkty i sprawdza zgodność z planem. Ty potwierdzasz jednym kliknięciem."
+          "Wykrywa klientów at-risk, generuje weekly summary, sugeruje zmiany w planach, pisze pierwsze drafty odpowiedzi. Realnie odzyskujesz wieczory."
       },
       {
-        title: "Smartwatch i opaski — automatycznie",
+        title: "Plany diet i treningów (z AI lub ręcznie)",
         body:
-          "Sen, regeneracja i kroki z Apple Watch, Whoop, Garmin, Oura, Polar i Samsung Health spinają się do panelu klienta same."
+          "Twórz w 5 min z bazą produktów albo pozwól AI rozpisać. Klient widzi listę zakupów, makra i wideo do ćwiczeń bez instrukcji obsługi."
       },
       {
-        title: "Pomiary i wykresy bez Excela",
+        title: "Wymiany posiłków — koniec WhatsAppowych pytań",
         body:
-          "Waga, obwody, zdjęcia sylwetki, samopoczucie — wszystko na jednej osi czasu, którą widzi też klient."
+          "Klient prosi o zamiennik, zatwierdza posiłek zawczasu albo otwiera Twój przepis. Wszystko w jednym inboxie. Akceptujesz, odrzucasz albo proponujesz inaczej — jednym kliknięciem."
       },
       {
-        title: "Twoja marka, nie nasza",
+        title: "Zdjęcia postępu + AI-weryfikacja posiłków",
         body:
-          "Logo, kolory, własna nazwa w wyższych planach. Klient widzi Twoją aplikację, nie naszą."
+          "Klient robi zdjęcie talerza, AI rozpoznaje produkty i sprawdza zgodność z planem. Zdjęcia sylwetki układają się w timeline porównawczy."
+      },
+      {
+        title: "Twoja marka, Twoja aplikacja",
+        body:
+          "Logo, kolory, własna nazwa, własna domena w planie Agencja. Klient widzi Twoją markę — wygląda jak premium produkt, nie kolejny SaaS."
       }
     ]
   },
@@ -189,7 +197,7 @@ const pl: MarketingCopy = {
       {
         n: "02",
         title: "Zaproś klienta linkiem",
-        body: "Klient instaluje aplikację na iOS lub Android, loguje się przez magic link."
+        body: "Klient otwiera link w przeglądarce i loguje się przez magic link. Nic nie instaluje."
       },
       {
         n: "03",
@@ -205,48 +213,56 @@ const pl: MarketingCopy = {
   },
   pricing: {
     eyebrow: "Cennik",
-    title: "Płacisz tyle, ilu masz klientów. Bez ukrytych dopłat.",
-    sub: "Wszystkie plany działają na web, iOS i Android. Anulujesz, kiedy chcesz.",
+    title: "Trzy plany. Bez ukrytych dopłat. Bez prowizji od klienta.",
+    sub: "Każdy plan ma 14 dni za darmo bez karty. Anulujesz w jednym kliknięciu, dane masz do eksportu przez 90 dni.",
     perMonth: "PLN / miesiąc",
-    cta: "Wybierz plan",
+    cta: "Zacznij za darmo",
     ctaSecondary: "Porozmawiaj z nami",
-    note: "Faktura VAT na firmę. Płatność kartą lub przelewem."
+    note: "Faktura VAT na firmę. Płatność kartą lub przelewem. Roczna płatność = 2 miesiące gratis."
   },
   faq: {
     title: "Pytania, które dostajemy najczęściej",
     sub: "Jeśli nie ma tu Twojego — napisz, odpisujemy w ciągu doby.",
     items: [
       {
-        q: "Czy klient musi instalować aplikację?",
-        a: "Może, ale nie musi. Aplikacja działa w przeglądarce tak samo dobrze jak na iOS i Androidzie. Klient sam wybiera."
+        q: "Czy klient musi coś instalować?",
+        a: "Nie. Aplikacja działa w przeglądarce — na komputerze, tablecie i w telefonie. Klient klika link i wchodzi."
       },
       {
-        q: "Co się dzieje, jeśli mam już bazę klientów gdzie indziej?",
-        a: "Importujemy dane z arkusza CSV. Plany diet i treningów możesz przekleić — z Excela też."
+        q: "Mam już klientów w Excelu / Sheets / WhatsAppie. Przenoszenie to koszmar.",
+        a: "Importujemy listę klientów jednym plikiem CSV. Plany diet i treningów wklejasz z Excela. Pierwsze 5 klientów przenosimy razem z Tobą na 30-minutowym calu — w pakiecie."
+      },
+      {
+        q: "Co dokładnie robi AI admin assistant?",
+        a: "Streszcza weekly check-iny w 3 zdania, wykrywa klientów którzy przestali odpisywać (at-risk), sugeruje korekty planów na podstawie pomiarów i pisze pierwsze drafty Twoich odpowiedzi. Włączasz go opcjonalnie."
       },
       {
         q: "Czy muszę umieć korzystać z AI?",
-        a: "Nie. AI jest opcjonalna i działa w tle. Możesz układać plany całkowicie ręcznie."
+        a: "Nie. Wszystko działa też ręcznie. AI to dodatkowy tryb, nie wymóg."
       },
       {
-        q: "Czy moi klienci widzą moją markę?",
-        a: "Tak. W planie Studio i wyżej dodajesz logo, kolory i nazwę. Klient widzi Twoją aplikację, nie naszą."
+        q: "Czy moi klienci widzą moją markę, nie waszą?",
+        a: "W planie Studio i Agencja — Twoje logo, kolory i nazwa. W Agencji dodatkowo własna domena (np. app.tojetstwojadomena.pl). Klient nie wie, że stoi za tym DietApp."
+      },
+      {
+        q: "Ile realnie kosztuje mnie aplikacja?",
+        a: "99 PLN miesięcznie to mniej niż 1 sesja PT. Jeśli zatrzymasz dzięki niej choć jednego klienta więcej (300–800 PLN/mc), pokrywasz nią rok subskrypcji."
       },
       {
         q: "Co z RODO?",
-        a: "Dane trzymamy w UE. Klient zatwierdza zgody przy rejestracji. Jako trener masz wgląd tylko w dane swoich klientów."
+        a: "Dane trzymamy w UE. Klient zatwierdza zgody przy rejestracji. Jako trener masz wgląd tylko w dane swoich klientów. Eksport i usunięcie konta — jedno kliknięcie."
       },
       {
         q: "Czy mogę zrezygnować w trakcie miesiąca?",
-        a: "Tak. Subskrypcja działa do końca opłaconego okresu, dane pozostają dostępne do eksportu przez 90 dni."
+        a: "Tak. Subskrypcja działa do końca opłaconego okresu, dane pozostają dostępne do eksportu przez 90 dni. Bez prowizji, bez umów na rok."
       }
     ]
   },
   finalCta: {
-    title: "Twoi klienci czekają na coś prostszego.",
-    sub: "Przetestuj za darmo przez 14 dni. Nie pytamy o kartę.",
-    cta: "Wypróbuj za darmo",
-    secondary: "Umów demo"
+    title: "Twoi klienci są gotowi na coś prostszego niż WhatsApp.",
+    sub: "14 dni za darmo, bez karty. Pierwsi klienci przenoszeni razem z Tobą.",
+    cta: "Zacznij za darmo",
+    secondary: "Umów 15-min demo"
   },
   footer: {
     tagline: "Jedna aplikacja dla Ciebie i Twoich klientów.",
@@ -285,7 +301,7 @@ const en: MarketingCopy = {
   meta: {
     title: "DietApp — the app for personal trainers and their clients",
     description:
-      "Run clients, not spreadsheets. Diets, workouts, progress and an AI coach in one app — web, iOS and Android. Try it free.",
+      "Run clients, not spreadsheets. Diets, workouts, progress and an AI coach in one web app. Try it free.",
     ogAlt: "DietApp — app for personal trainers",
     keywords: [
       "personal trainer app",
@@ -306,15 +322,15 @@ const en: MarketingCopy = {
     cta: "Try it free"
   },
   hero: {
-    badge: "Web · iOS · Android",
+    badge: "Web app",
     h1Top: "Run clients.",
     h1Accent: "Not spreadsheets.",
     h1Bottom: "",
     sub:
-      "Diets, workouts, measurements, meal photos and an AI coach — in one app, on every device. Your clients get an app with your logo. You get your evenings back.",
-    ctaPrimary: "Try it free",
+      "Replace WhatsApp, Excel and PDFs with one system. Client onboarding, plans, check-ins, progress photos and an AI assistant — in one place. From 99 PLN/mo, your first kept client pays for the year.",
+    ctaPrimary: "Try it free · 14 days",
     ctaSecondary: "See how it works",
-    proof: "Dozens of trainers already work in one tool instead of five."
+    proof: "Trainers get back 5–10h every week — hours that used to go on admin."
   },
   logos: {
     label: "We sync with the devices your clients already wear",
@@ -322,24 +338,25 @@ const en: MarketingCopy = {
   },
   outcomes: {
     title: "What actually changes after switching to DietApp",
-    sub: "We don't promise a revolution. We share what we measure with trainers who run their business with us.",
+    sub: "We don't promise a revolution. We share concrete numbers from trainers who run their business with us.",
     cards: [
-      { kpi: "6 h", label: "back to you weekly", note: "Less plan copy-paste, more sessions." },
-      { kpi: "3×", label: "more client touchpoints", note: "Because it happens in one app, not five chats." },
-      { kpi: "92%", label: "retention into month two", note: "Clients see their own progress and stay." }
+      { kpi: "+1 client", label: "pays for the year", note: "99 PLN/mo is nothing if you retain one extra client." },
+      { kpi: "5–10 h", label: "back to you weekly", note: "Less plan copy-paste, less manual replies, more sessions." },
+      { kpi: "2×", label: "more clients, same hours", note: "Onboarding, check-ins and reminders happen without you." }
     ]
   },
   features: {
     eyebrow: "What's inside",
-    title: "Everything you've been doing in five tabs",
-    sub: "Excel, WhatsApp, Notion, Trello, FitNotes — one tab is enough.",
+    title: "What actually kills the spreadsheet",
+    sub: "Onboarding, check-ins, progress, photos, payments — they stop being your job.",
     items: [
-      { title: "Diet plans clients open in a second", body: "Build a plan in five minutes with the product database or let AI draft it. Clients see a shopping list, macros and recipes — no instructions needed." },
-      { title: "Workouts with video and set history", body: "Every exercise has a demo. Clients tick sets, you see progress live." },
-      { title: "Meal photos with AI check", body: "Client snaps a plate, AI recognises products and matches it to the plan. You confirm with one tap." },
-      { title: "Wearables — automatic", body: "Sleep, recovery and steps from Apple Watch, Whoop, Garmin, Oura, Polar and Samsung Health show up in the panel by themselves." },
-      { title: "Measurements without Excel", body: "Weight, circumference, body shots, mood — on one timeline both of you can see." },
-      { title: "Your brand, not ours", body: "Logo, colours, custom name on higher plans. Clients see your app, not ours." }
+      { title: "5-minute client onboarding", body: "Send a link, client fills a form, diet and workout plans generate automatically. Import existing clients from Excel or Google Sheets." },
+      { title: "Auto check-ins and reminders", body: "Weekly check-ins send themselves. Client replies, AI summarises, you see one summary instead of thirty messages." },
+      { title: "AI admin assistant", body: "Detects at-risk clients, writes weekly summaries, suggests plan tweaks, drafts your replies. Real evenings back." },
+      { title: "Diet and workout plans (AI or manual)", body: "Build in 5 minutes with the product database or let AI draft. Clients see a shopping list, macros and exercise videos — no instructions needed." },
+      { title: "Meal exchanges — kill WhatsApp questions", body: "Client requests a swap, pre-approves a meal, or opens your recipe. All in one inbox. Approve, reject, or counter — one click." },
+      { title: "Progress photos + AI meal check", body: "Client snaps a plate, AI recognises items and matches the plan. Body shots stack into a comparison timeline." },
+      { title: "Your brand, your app", body: "Logo, colours, custom name. Custom domain on Agency. Clients see your brand — looks like a premium product, not another SaaS." }
     ]
   },
   flow: {
@@ -348,37 +365,39 @@ const en: MarketingCopy = {
     sub: "No onboarding consultant, no training. Just an account.",
     steps: [
       { n: "01", title: "Create an account", body: "Email, name, plan. No card required, no per-client fees." },
-      { n: "02", title: "Invite your client", body: "Client installs iOS or Android, logs in via magic link." },
+      { n: "02", title: "Invite your client", body: "Client opens the link in their browser and logs in via magic link. Nothing to install." },
       { n: "03", title: "Build the first plan", body: "Manually or with AI. Client immediately sees diet, workout and calendar." },
       { n: "04", title: "Coach, don't type", body: "Updates, progress checks, tweaks — all in one view." }
     ]
   },
   pricing: {
     eyebrow: "Pricing",
-    title: "You pay per the clients you have. No hidden fees.",
-    sub: "Every plan works on web, iOS and Android. Cancel anytime.",
+    title: "Three plans. No hidden fees. No per-client commission.",
+    sub: "Every plan has 14 days free, no card. Cancel in one click, data stays exportable for 90 days.",
     perMonth: "PLN / month",
-    cta: "Choose plan",
+    cta: "Start free",
     ctaSecondary: "Talk to us",
-    note: "VAT invoice. Card or transfer."
+    note: "VAT invoice. Card or transfer. Annual plan = 2 months free."
   },
   faq: {
     title: "Questions we get most",
     sub: "Don't see yours? Drop us a line — we reply within a day.",
     items: [
-      { q: "Does my client have to install an app?", a: "Optional. The web version works as well as iOS and Android. Client picks." },
-      { q: "I have clients elsewhere — can I move?", a: "Import via CSV. Plans paste from Excel." },
-      { q: "Do I need to learn AI?", a: "No. AI is optional. You can plan everything by hand." },
-      { q: "Will my clients see my brand?", a: "On Studio and above — your logo, colours and name. They see your app." },
-      { q: "GDPR?", a: "EU hosting. Client consents at sign-up. As a trainer you only see your own clients' data." },
-      { q: "Can I cancel mid-month?", a: "Yes. Active until the paid period ends. Data stays exportable for 90 days." }
+      { q: "Does my client need to install anything?", a: "No. The app runs in the browser — desktop, tablet, phone. Client clicks a link and is in." },
+      { q: "My clients are in Excel / Sheets / WhatsApp. Moving is a nightmare.", a: "CSV import for the client list. Plans paste straight from Excel. We migrate your first 5 clients with you on a 30-min call — included." },
+      { q: "What exactly does the AI admin assistant do?", a: "Summarises weekly check-ins in 3 sentences, flags clients who stopped replying (at-risk), suggests plan tweaks from measurements, and drafts your first replies. Optional." },
+      { q: "Do I need to learn AI?", a: "No. Everything works manually too. AI is a mode, not a requirement." },
+      { q: "Will my clients see my brand, not yours?", a: "On Studio and Agency — your logo, colours, name. Agency adds a custom domain. Your client doesn't know DietApp powers it." },
+      { q: "What does it really cost me?", a: "99 PLN/mo is less than one PT session. Keep one extra client (300–800 PLN/mo) and you've paid for the year." },
+      { q: "GDPR?", a: "EU hosting. Client consents at sign-up. As a trainer you only see your own clients' data. Export and account delete — one click." },
+      { q: "Can I cancel mid-month?", a: "Yes. Active until the paid period ends. Data exportable for 90 days. No fees, no annual lock-in." }
     ]
   },
   finalCta: {
-    title: "Your clients are waiting for something simpler.",
-    sub: "Test free for 14 days. No card required.",
-    cta: "Try it free",
-    secondary: "Book a demo"
+    title: "Your clients are ready for something simpler than WhatsApp.",
+    sub: "14 days free, no card. We migrate your first clients with you.",
+    cta: "Start free",
+    secondary: "Book a 15-min demo"
   },
   footer: {
     tagline: "One app for you and your clients.",

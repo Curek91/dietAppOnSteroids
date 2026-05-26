@@ -7,6 +7,7 @@ import {
   seedClients,
   seedDietPlans,
   seedMealPhotos,
+  seedMealProposals,
   seedProducts,
   seedProgress,
   seedSubscriptions,
@@ -20,8 +21,13 @@ import type {
   AIMessage,
   ClientProfile,
   DietPlan,
+  MealItem,
   MealPhoto,
   MealPhotoStatus,
+  MealProposal,
+  MealProposalKind,
+  MealProposalStatus,
+  MealRecipe,
   PlanTier,
   ProgressEntry,
   Product,
@@ -40,6 +46,7 @@ interface AppState {
   dietPlans: DietPlan[];
   workoutPlans: WorkoutPlan[];
   mealPhotos: MealPhoto[];
+  mealProposals: MealProposal[];
   wearables: WearableSnapshot[];
   aiInsights: AIInsight[];
   aiChat: AIMessage[];
@@ -66,6 +73,7 @@ interface AppState {
   addMealItem: (planId: string, mealId: string, productId: string, grams: number) => void;
   updateMealItem: (planId: string, mealId: string, productId: string, grams: number) => void;
   removeMealItem: (planId: string, mealId: string, productId: string) => void;
+  setMealRecipe: (planId: string, mealId: string, recipe: MealRecipe | undefined) => void;
 
   upsertWorkoutPlan: (plan: WorkoutPlan) => void;
   removeWorkoutPlan: (id: string) => void;
@@ -83,6 +91,19 @@ interface AppState {
   addMealPhoto: (photo: Omit<MealPhoto, "id" | "uploadedAt" | "status">) => MealPhoto;
   setMealPhotoStatus: (id: string, status: MealPhotoStatus, comment?: string) => void;
   removeMealPhoto: (id: string) => void;
+
+  // meal proposals (Wymiany)
+  proposeMealChange: (
+    input: Omit<MealProposal, "id" | "createdAt" | "status" | "respondedAt" | "trainerComment" | "counterItems">
+  ) => MealProposal;
+  respondToProposal: (
+    id: string,
+    status: MealProposalStatus,
+    payload?: { comment?: string; counterItems?: MealItem[] }
+  ) => void;
+  addTrainerRecipe: (
+    input: Omit<MealProposal, "id" | "createdAt" | "status" | "respondedAt" | "trainerComment" | "counterItems" | "kind">
+  ) => MealProposal;
 
   // wearables
   syncWearable: (clientId: string) => void;
@@ -112,6 +133,7 @@ export const useApp = create<AppState>()(
       dietPlans: seedDietPlans,
       workoutPlans: seedWorkoutPlans,
       mealPhotos: seedMealPhotos,
+      mealProposals: seedMealProposals,
       wearables: seedWearables,
       aiInsights: seedAIInsights,
       aiChat: [],
@@ -252,6 +274,26 @@ export const useApp = create<AppState>()(
                 }
           )
         }),
+      setMealRecipe: (planId, mealId, recipe) =>
+        set({
+          dietPlans: get().dietPlans.map((d) =>
+            d.id !== planId
+              ? d
+              : {
+                  ...d,
+                  meals: d.meals.map((m) =>
+                    m.id !== mealId
+                      ? m
+                      : {
+                          ...m,
+                          recipe: recipe
+                            ? { ...recipe, updatedAt: new Date().toISOString() }
+                            : undefined
+                        }
+                  )
+                }
+          )
+        }),
 
       upsertWorkoutPlan: (plan) => {
         const existing = get().workoutPlans.find((w) => w.id === plan.id);
@@ -352,6 +394,43 @@ export const useApp = create<AppState>()(
         }),
       removeMealPhoto: (id) => set({ mealPhotos: get().mealPhotos.filter((m) => m.id !== id) }),
 
+      proposeMealChange: (input) => {
+        const proposal: MealProposal = {
+          ...input,
+          id: newId("mprop"),
+          status: "pending",
+          createdAt: new Date().toISOString()
+        };
+        set({ mealProposals: [proposal, ...get().mealProposals] });
+        return proposal;
+      },
+      respondToProposal: (id, status, payload) =>
+        set({
+          mealProposals: get().mealProposals.map((p) =>
+            p.id !== id
+              ? p
+              : {
+                  ...p,
+                  status,
+                  trainerComment: payload?.comment ?? p.trainerComment,
+                  counterItems: payload?.counterItems ?? p.counterItems,
+                  respondedAt: new Date().toISOString()
+                }
+          )
+        }),
+      addTrainerRecipe: (input) => {
+        const recipe: MealProposal = {
+          ...input,
+          kind: "trainer_recipe",
+          id: newId("mprop"),
+          status: "approved",
+          createdAt: new Date().toISOString(),
+          respondedAt: new Date().toISOString()
+        };
+        set({ mealProposals: [recipe, ...get().mealProposals] });
+        return recipe;
+      },
+
       syncWearable: (clientId) => {
         const client = get().clients.find((c) => c.id === clientId);
         if (!client) return;
@@ -414,7 +493,7 @@ export const useApp = create<AppState>()(
         })
     }),
     {
-      name: "dietapp-store-v2",
+      name: "dietapp-store-v4",
       partialize: (state) => ({
         currentUserId: state.currentUserId,
         users: state.users,
@@ -424,6 +503,7 @@ export const useApp = create<AppState>()(
         dietPlans: state.dietPlans,
         workoutPlans: state.workoutPlans,
         mealPhotos: state.mealPhotos,
+        mealProposals: state.mealProposals,
         wearables: state.wearables,
         aiInsights: state.aiInsights,
         aiChat: state.aiChat,

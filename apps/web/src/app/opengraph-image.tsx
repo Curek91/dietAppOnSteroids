@@ -64,14 +64,14 @@ export default async function OgImage() {
           </div>
           <div
             style={{
-              fontSize: 28,
+              fontSize: 26,
               opacity: 0.92,
-              maxWidth: 900,
+              maxWidth: 980,
               lineHeight: 1.3
             }}
           >
-            Diety, treningi, postępy i AI-coach w jednej aplikacji.
-            Web · iOS · Android.
+            Zamień WhatsApp, Excel i PDF-y w jeden system.
+            Plany, check-iny, zdjęcia, AI-asystent.
           </div>
         </div>
 
