@@ -5,7 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 import {
   ArrowLeft, Mail, Phone, Calendar, Target, Trash2, User as UserIcon,
-  Activity, Salad, Dumbbell, Save, Watch, Camera, Sparkles
+  Activity, Salad, Dumbbell, Save, Watch, Camera, Sparkles, Image as ImageIcon
 } from "lucide-react";
 import { useApp } from "@/lib/store";
 import { Avatar } from "@/components/Avatar";
@@ -27,6 +27,7 @@ export default function ClientDetailPage() {
   const updateClient = useApp((s) => s.updateClient);
   const removeClient = useApp((s) => s.removeClient);
   const progress = useApp((s) => s.progress);
+  const progressPhotos = useApp((s) => s.progressPhotos);
   const wearables = useApp((s) => s.wearables);
   const currentUserId = useApp((s) => s.currentUserId);
   const aiInsights = useApp((s) => s.aiInsights);
@@ -39,6 +40,13 @@ export default function ClientDetailPage() {
   const myProgress = useMemo(
     () => progress.filter((p) => p.clientId === params.id).sort((a, b) => a.date.localeCompare(b.date)),
     [progress, params.id]
+  );
+  const myPhotos = useMemo(
+    () =>
+      progressPhotos
+        .filter((p) => p.clientId === params.id)
+        .sort((a, b) => b.date.localeCompare(a.date)),
+    [progressPhotos, params.id]
   );
   const myWearables = useMemo(
     () => wearables.filter((w) => w.clientId === params.id).sort((a, b) => a.date.localeCompare(b.date)),
@@ -169,6 +177,56 @@ export default function ClientDetailPage() {
           <h3 className="font-display text-lg font-semibold text-ink-900 mb-1">Wykres trendów</h3>
           <p className="text-sm text-ink-500 mb-4">Wszystkie wymiary, wizualnie.</p>
           <ProgressChart data={myProgress} metrics={["weight", "waist", "chest", "arm", "thigh"]} />
+        </div>
+      )}
+
+      {tab === "progress" && (
+        <div className="card">
+          <div className="flex items-center gap-2 mb-1">
+            <ImageIcon className="h-4 w-4 text-brand-600" />
+            <h3 className="font-display text-lg font-semibold text-ink-900">
+              Zdjęcia sylwetki klienta
+            </h3>
+          </div>
+          <p className="text-sm text-ink-500 mb-4">
+            {myPhotos.length === 0
+              ? "Klient nie wrzucił jeszcze żadnych zdjęć."
+              : `${myPhotos.length} zdjęć w timeline.`}
+          </p>
+          {myPhotos.length > 0 && (
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+              {myPhotos.map((p) => (
+                <a
+                  key={p.id}
+                  href={p.dataUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="relative rounded-xl overflow-hidden border border-ink-100 bg-ink-50/60 group"
+                >
+                  <img
+                    src={p.dataUrl}
+                    alt={`${p.pose} ${p.date}`}
+                    className="w-full aspect-[2/3] object-cover"
+                  />
+                  <div className="absolute inset-x-0 bottom-0 p-2 bg-gradient-to-t from-ink-900/80 to-transparent">
+                    <div className="text-[10px] uppercase tracking-wider font-semibold text-white/85">
+                      {p.pose === "front"
+                        ? "Przód"
+                        : p.pose === "side"
+                        ? "Bok"
+                        : p.pose === "back"
+                        ? "Tył"
+                        : "Inne"}
+                    </div>
+                    <div className="text-xs font-semibold text-white">
+                      {p.date}
+                      {p.weight ? ` · ${p.weight} kg` : ""}
+                    </div>
+                  </div>
+                </a>
+              ))}
+            </div>
+          )}
         </div>
       )}
     </div>

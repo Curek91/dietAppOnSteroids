@@ -38,6 +38,19 @@ export interface ProgressEntry {
   thigh?: number;
 }
 
+export type ProgressPhotoPose = "front" | "side" | "back" | "custom";
+
+export interface ProgressPhoto {
+  id: string;
+  clientId: string;
+  date: string;            // YYYY-MM-DD — when the photo represents
+  pose: ProgressPhotoPose;
+  dataUrl: string;         // base64 data URL (svg seed or uploaded jpeg)
+  weight?: number;         // optional weight snapshot at the time
+  note?: string;
+  uploadedAt: string;      // ISO timestamp
+}
+
 export interface Product {
   id: string;
   name: string;
@@ -111,6 +124,38 @@ export interface Macros {
   protein: number;
   fat: number;
   carbs: number;
+}
+
+// ─── Calendar events ──────────────────────────────────────────────
+// A unified timeline for trainer and client: workouts, hourly meals,
+// check-ins, measurement days, online consultations and custom blocks.
+export type CalendarEventKind =
+  | "workout"
+  | "meal"
+  | "checkin"
+  | "measurement"
+  | "consultation"
+  | "custom";
+
+export type CalendarEventStatus = "planned" | "done" | "missed" | "moved";
+
+export interface CalendarEvent {
+  id: string;
+  clientId: string;
+  trainerId: string;
+  kind: CalendarEventKind;
+  title: string;
+  date: string;            // YYYY-MM-DD
+  startTime?: string;      // HH:MM 24h; absent = all-day
+  durationMinutes?: number;
+  workoutDayId?: string;   // optional link to a WorkoutDay
+  mealId?: string;         // optional link to a Meal
+  dietPlanId?: string;
+  workoutPlanId?: string;
+  status: CalendarEventStatus;
+  notes?: string;
+  createdAt: string;
+  updatedAt?: string;
 }
 
 // ─── Meal exchanges (Wymiany posiłków) ────────────────────────────

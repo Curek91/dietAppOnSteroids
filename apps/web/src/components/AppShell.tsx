@@ -17,7 +17,8 @@ import {
   Sparkles,
   Watch,
   Camera,
-  Repeat
+  Repeat,
+  CalendarDays
 } from "lucide-react";
 import { Logo } from "@/components/Logo";
 import { Avatar } from "@/components/Avatar";
@@ -34,8 +35,9 @@ interface NavItem {
 
 const trainerNav: NavItem[] = [
   { href: "/trainer", label: "Pulpit", icon: LayoutGrid },
+  { href: "/trainer/calendar", label: "Kalendarz", icon: CalendarDays, badge: "NEW" },
   { href: "/trainer/clients", label: "Podopieczni", icon: Users },
-  { href: "/trainer/exchanges", label: "Wymiany posiłków", icon: Repeat, badge: "NEW" },
+  { href: "/trainer/exchanges", label: "Wymiany posiłków", icon: Repeat },
   { href: "/trainer/proofs", label: "Zdjęcia posiłków", icon: Camera, badge: "AI" },
   { href: "/trainer/library", label: "Baza produktów", icon: Salad },
   { href: "/trainer/insights", label: "Analiza", icon: LineChart },
@@ -44,8 +46,9 @@ const trainerNav: NavItem[] = [
 
 const clientNav: NavItem[] = [
   { href: "/client", label: "Dziś", icon: LayoutGrid },
+  { href: "/client/calendar", label: "Kalendarz", icon: CalendarDays, badge: "NEW" },
   { href: "/client/diet", label: "Dieta", icon: Salad },
-  { href: "/client/meals", label: "Wymiany posiłków", icon: Repeat, badge: "NEW" },
+  { href: "/client/meals", label: "Wymiany posiłków", icon: Repeat },
   { href: "/client/workout", label: "Trening", icon: Dumbbell },
   { href: "/client/wearable", label: "Zegarek", icon: Watch },
   { href: "/client/proofs", label: "Moje posiłki", icon: Camera, badge: "AI" },

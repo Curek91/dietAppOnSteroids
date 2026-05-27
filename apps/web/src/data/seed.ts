@@ -1,10 +1,14 @@
 import type {
   AIInsight,
+  CalendarEvent,
+  CalendarEventKind,
+  CalendarEventStatus,
   ClientProfile,
   DietPlan,
   MealPhoto,
   MealProposal,
   ProgressEntry,
+  ProgressPhoto,
   Product,
   Subscription,
   User,
@@ -654,6 +658,278 @@ export const seedMealProposals: MealProposal[] = [
     createdAt: "2026-05-20T09:00:00Z",
     respondedAt: "2026-05-20T09:00:00Z"
   }
+];
+
+// ─── Progress photos (sylwetka) ────────────────────────────────────
+// Stylized silhouette SVGs as data URLs — no external assets, deterministic.
+const silhouetteSvg = (hueA: number, hueB: number, label: string) =>
+  `data:image/svg+xml;utf8,${encodeURIComponent(
+    `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 600'>` +
+      `<defs><linearGradient id='g' x1='0' y1='0' x2='0' y2='1'>` +
+      `<stop offset='0%' stop-color='hsl(${hueA},70%,75%)'/>` +
+      `<stop offset='100%' stop-color='hsl(${hueB},70%,55%)'/>` +
+      `</linearGradient></defs>` +
+      `<rect width='400' height='600' fill='url(%23g)'/>` +
+      `<g fill='white' opacity='0.85'>` +
+      `<circle cx='200' cy='110' r='45'/>` +
+      `<rect x='150' y='160' width='100' height='180' rx='40'/>` +
+      `<rect x='115' y='180' width='30' height='130' rx='14'/>` +
+      `<rect x='255' y='180' width='30' height='130' rx='14'/>` +
+      `<rect x='160' y='345' width='35' height='200' rx='14'/>` +
+      `<rect x='205' y='345' width='35' height='200' rx='14'/>` +
+      `</g>` +
+      `<text x='50%' y='95%' text-anchor='middle' font-family='system-ui' font-size='22' fill='white' opacity='0.9'>${label}</text>` +
+      `</svg>`
+  )}`;
+
+export const seedProgressPhotos: ProgressPhoto[] = [
+  // Marta — przed (styczeń 2026)
+  {
+    id: "pp-1",
+    clientId: "c-1",
+    date: "2026-01-10",
+    pose: "front",
+    dataUrl: silhouetteSvg(20, 30, "PRZÓD · 72.0 kg"),
+    weight: 72.0,
+    note: "Start programu — czuję motywację.",
+    uploadedAt: "2026-01-10T09:00:00Z"
+  },
+  {
+    id: "pp-2",
+    clientId: "c-1",
+    date: "2026-01-10",
+    pose: "side",
+    dataUrl: silhouetteSvg(40, 20, "BOK · 72.0 kg"),
+    weight: 72.0,
+    uploadedAt: "2026-01-10T09:00:30Z"
+  },
+  // Marta — po 4 miesiącach (maj 2026)
+  {
+    id: "pp-3",
+    clientId: "c-1",
+    date: "2026-05-10",
+    pose: "front",
+    dataUrl: silhouetteSvg(160, 200, "PRZÓD · 66.1 kg"),
+    weight: 66.1,
+    note: "Po 4 miesiącach — -5.9 kg, czuję się świetnie!",
+    uploadedAt: "2026-05-10T08:30:00Z"
+  },
+  {
+    id: "pp-4",
+    clientId: "c-1",
+    date: "2026-05-10",
+    pose: "side",
+    dataUrl: silhouetteSvg(180, 220, "BOK · 66.1 kg"),
+    weight: 66.1,
+    uploadedAt: "2026-05-10T08:30:30Z"
+  },
+  // Kuba — masa, jedno zdjęcie
+  {
+    id: "pp-5",
+    clientId: "c-2",
+    date: "2026-05-02",
+    pose: "front",
+    dataUrl: silhouetteSvg(200, 230, "PRZÓD · 82.4 kg"),
+    weight: 82.4,
+    note: "Progres masy — widać szerokość w plecach.",
+    uploadedAt: "2026-05-02T07:15:00Z"
+  }
+];
+
+// ─── Calendar events ──────────────────────────────────────────────
+// Generates a week of events for one client given training days, meal slots
+// and ad-hoc one-offs. Status is derived from whether the day is past/today/future.
+const REF_TODAY = "2026-05-26"; // anchor for past/future logic; matches demo seed era
+
+const dateForDow = (mondayIso: string, dow: number): string => {
+  const [y, m, d] = mondayIso.split("-").map(Number);
+  const dt = new Date(Date.UTC(y, m - 1, d + dow));
+  return dt.toISOString().slice(0, 10);
+};
+
+const inferStatus = (
+  date: string,
+  override?: CalendarEventStatus
+): CalendarEventStatus => {
+  if (override) return override;
+  if (date < REF_TODAY) return "done";
+  return "planned";
+};
+
+interface WeekSpec {
+  clientId: string;
+  trainerId: string;
+  mondayIso: string;
+  workouts: { dow: number; title: string; time?: string; durationMinutes?: number; workoutDayId?: string; statusOverride?: CalendarEventStatus }[];
+  meals: { dow?: number; time: string; title: string; mealId?: string; dietPlanId?: string; statusOverride?: CalendarEventStatus }[]; // dow absent = every day
+  extras?: { dow: number; kind: CalendarEventKind; title: string; time?: string; durationMinutes?: number; statusOverride?: CalendarEventStatus; notes?: string }[];
+}
+
+function generateWeek(spec: WeekSpec): CalendarEvent[] {
+  const events: CalendarEvent[] = [];
+  const cAt = `${spec.mondayIso}T06:00:00Z`;
+  let counter = 0;
+  const nid = (k: string) =>
+    `cal-${k}-${spec.clientId}-${spec.mondayIso.slice(5)}-${counter++}`;
+
+  for (const w of spec.workouts) {
+    const date = dateForDow(spec.mondayIso, w.dow);
+    events.push({
+      id: nid("w"),
+      clientId: spec.clientId,
+      trainerId: spec.trainerId,
+      kind: "workout",
+      title: w.title,
+      date,
+      startTime: w.time,
+      durationMinutes: w.durationMinutes,
+      workoutDayId: w.workoutDayId,
+      status: inferStatus(date, w.statusOverride),
+      createdAt: cAt
+    });
+  }
+
+  for (const m of spec.meals) {
+    const dows = m.dow !== undefined ? [m.dow] : [0, 1, 2, 3, 4, 5, 6];
+    for (const dow of dows) {
+      const date = dateForDow(spec.mondayIso, dow);
+      events.push({
+        id: nid("m"),
+        clientId: spec.clientId,
+        trainerId: spec.trainerId,
+        kind: "meal",
+        title: m.title,
+        date,
+        startTime: m.time,
+        mealId: m.mealId,
+        dietPlanId: m.dietPlanId,
+        status: inferStatus(date, m.statusOverride),
+        createdAt: cAt
+      });
+    }
+  }
+
+  for (const x of spec.extras ?? []) {
+    const date = dateForDow(spec.mondayIso, x.dow);
+    events.push({
+      id: nid("x"),
+      clientId: spec.clientId,
+      trainerId: spec.trainerId,
+      kind: x.kind,
+      title: x.title,
+      date,
+      startTime: x.time,
+      durationMinutes: x.durationMinutes,
+      notes: x.notes,
+      status: inferStatus(date, x.statusOverride),
+      createdAt: cAt
+    });
+  }
+
+  return events;
+}
+
+// Marta (c-1) — redukcja, train Mon/Wed/Fri, 3 meals/day. 2 tygodnie.
+const martaMeals = [
+  { time: "08:00", title: "Śniadanie · owsianka", mealId: "m-1", dietPlanId: "d-1" },
+  { time: "14:00", title: "Obiad · kurczak z ryżem", mealId: "m-2", dietPlanId: "d-1" },
+  { time: "19:30", title: "Kolacja · łosoś z batatami", mealId: "m-3", dietPlanId: "d-1" }
+];
+
+// Kuba (c-2) — masa, train Tue/Thu/Sat, 5 meals/day.
+const kubaMeals = [
+  { time: "07:30", title: "Śniadanie · owsianka XL", mealId: "m-4", dietPlanId: "d-2" },
+  { time: "10:30", title: "II śniadanie", dietPlanId: "d-2" },
+  { time: "13:30", title: "Obiad · wołowina + ryż", mealId: "m-5", dietPlanId: "d-2" },
+  { time: "16:30", title: "Posiłek po treningu", mealId: "m-6", dietPlanId: "d-2" },
+  { time: "20:00", title: "Kolacja", dietPlanId: "d-2" }
+];
+
+export const seedCalendarEvents: CalendarEvent[] = [
+  // ── Marta — ostatni tydzień (2026-05-18) ──
+  ...generateWeek({
+    clientId: "c-1",
+    trainerId: "u-trainer-1",
+    mondayIso: "2026-05-18",
+    workouts: [
+      { dow: 0, title: "Push A · klatka", time: "18:00", durationMinutes: 60, statusOverride: "done" },
+      { dow: 2, title: "Pull A · plecy", time: "18:00", durationMinutes: 60, statusOverride: "done" },
+      { dow: 4, title: "Legs A · nogi", time: "18:00", durationMinutes: 70, statusOverride: "missed" }
+    ],
+    meals: martaMeals,
+    extras: [
+      { dow: 4, kind: "checkin", title: "Cotygodniowy check-in", time: "20:00", statusOverride: "done" },
+      { dow: 6, kind: "measurement", title: "Pomiary (waga + obwody)", time: "09:00", statusOverride: "done" }
+    ]
+  }),
+
+  // ── Marta — bieżący tydzień (2026-05-25), część done, część planned ──
+  ...generateWeek({
+    clientId: "c-1",
+    trainerId: "u-trainer-1",
+    mondayIso: "2026-05-25",
+    workouts: [
+      { dow: 0, title: "Push A · klatka", time: "18:00", durationMinutes: 60, statusOverride: "done" },
+      { dow: 2, title: "Pull A · plecy", time: "18:00", durationMinutes: 60 },
+      { dow: 4, title: "Legs A · nogi", time: "18:00", durationMinutes: 70 }
+    ],
+    meals: martaMeals,
+    extras: [
+      { dow: 1, kind: "consultation", title: "Konsultacja online z trenerem", time: "09:00", durationMinutes: 30, notes: "Omówienie progresu z poprzedniego tygodnia." },
+      { dow: 4, kind: "checkin", title: "Cotygodniowy check-in", time: "20:00" },
+      { dow: 6, kind: "measurement", title: "Pomiary (waga + obwody)", time: "09:00" }
+    ]
+  }),
+
+  // ── Kuba (c-2) — bieżący tydzień ──
+  ...generateWeek({
+    clientId: "c-2",
+    trainerId: "u-trainer-1",
+    mondayIso: "2026-05-25",
+    workouts: [
+      { dow: 1, title: "Push B · siłowo", time: "19:00", durationMinutes: 90, statusOverride: "done" },
+      { dow: 3, title: "Pull B · siłowo", time: "19:00", durationMinutes: 90 },
+      { dow: 5, title: "Legs B · ciężki", time: "10:00", durationMinutes: 100 }
+    ],
+    meals: kubaMeals,
+    extras: [
+      { dow: 4, kind: "checkin", title: "Check-in (wideo)", time: "20:30" }
+    ]
+  }),
+
+  // ── Ola (c-3) — krótszy program, bieżący tydzień ──
+  ...generateWeek({
+    clientId: "c-3",
+    trainerId: "u-trainer-1",
+    mondayIso: "2026-05-25",
+    workouts: [
+      { dow: 2, title: "Full body A", time: "17:30", durationMinutes: 55 },
+      { dow: 5, title: "Full body B", time: "10:30", durationMinutes: 55 }
+    ],
+    meals: [
+      { time: "08:30", title: "Śniadanie", dietPlanId: "d-2" },
+      { time: "13:00", title: "Obiad", dietPlanId: "d-2" },
+      { time: "19:00", title: "Kolacja", dietPlanId: "d-2" }
+    ],
+    extras: [{ dow: 3, kind: "checkin", title: "Check-in", time: "19:30" }]
+  }),
+
+  // ── Marta — przyszły tydzień (2026-06-01), only planned skeleton ──
+  ...generateWeek({
+    clientId: "c-1",
+    trainerId: "u-trainer-1",
+    mondayIso: "2026-06-01",
+    workouts: [
+      { dow: 0, title: "Push A · klatka", time: "18:00", durationMinutes: 60 },
+      { dow: 2, title: "Pull A · plecy", time: "18:00", durationMinutes: 60 },
+      { dow: 4, title: "Legs A · nogi", time: "18:00", durationMinutes: 70 }
+    ],
+    meals: martaMeals.slice(0, 3),
+    extras: [
+      { dow: 4, kind: "checkin", title: "Cotygodniowy check-in", time: "20:00" },
+      { dow: 6, kind: "measurement", title: "Pomiary (waga + obwody + zdjęcia sylwetki)", time: "09:00" }
+    ]
+  })
 ];
 
 // ─── Subscriptions ────────────────────────────────────────────────

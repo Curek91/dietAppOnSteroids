@@ -4,12 +4,14 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import {
   seedAIInsights,
+  seedCalendarEvents,
   seedClients,
   seedDietPlans,
   seedMealPhotos,
   seedMealProposals,
   seedProducts,
   seedProgress,
+  seedProgressPhotos,
   seedSubscriptions,
   seedUsers,
   seedWearables,
@@ -19,6 +21,8 @@ import { getPlan } from "@/lib/plans";
 import type {
   AIInsight,
   AIMessage,
+  CalendarEvent,
+  CalendarEventStatus,
   ClientProfile,
   DietPlan,
   MealItem,
@@ -30,6 +34,7 @@ import type {
   MealRecipe,
   PlanTier,
   ProgressEntry,
+  ProgressPhoto,
   Product,
   Subscription,
   User,
@@ -42,11 +47,13 @@ interface AppState {
   users: User[];
   clients: ClientProfile[];
   progress: ProgressEntry[];
+  progressPhotos: ProgressPhoto[];
   products: Product[];
   dietPlans: DietPlan[];
   workoutPlans: WorkoutPlan[];
   mealPhotos: MealPhoto[];
   mealProposals: MealProposal[];
+  calendarEvents: CalendarEvent[];
   wearables: WearableSnapshot[];
   aiInsights: AIInsight[];
   aiChat: AIMessage[];
@@ -63,6 +70,9 @@ interface AppState {
 
   addProgress: (entry: Omit<ProgressEntry, "id">) => void;
   removeProgress: (id: string) => void;
+
+  addProgressPhoto: (photo: Omit<ProgressPhoto, "id" | "uploadedAt">) => ProgressPhoto;
+  removeProgressPhoto: (id: string) => void;
 
   addProduct: (p: Omit<Product, "id">) => Product;
   updateProduct: (id: string, patch: Partial<Product>) => void;
@@ -91,6 +101,12 @@ interface AppState {
   addMealPhoto: (photo: Omit<MealPhoto, "id" | "uploadedAt" | "status">) => MealPhoto;
   setMealPhotoStatus: (id: string, status: MealPhotoStatus, comment?: string) => void;
   removeMealPhoto: (id: string) => void;
+
+  // calendar
+  addCalendarEvent: (input: Omit<CalendarEvent, "id" | "createdAt" | "updatedAt">) => CalendarEvent;
+  updateCalendarEvent: (id: string, patch: Partial<Omit<CalendarEvent, "id">>) => void;
+  setCalendarEventStatus: (id: string, status: CalendarEventStatus) => void;
+  removeCalendarEvent: (id: string) => void;
 
   // meal proposals (Wymiany)
   proposeMealChange: (
@@ -129,11 +145,13 @@ export const useApp = create<AppState>()(
       users: seedUsers,
       clients: seedClients,
       progress: seedProgress,
+      progressPhotos: seedProgressPhotos,
       products: seedProducts,
       dietPlans: seedDietPlans,
       workoutPlans: seedWorkoutPlans,
       mealPhotos: seedMealPhotos,
       mealProposals: seedMealProposals,
+      calendarEvents: seedCalendarEvents,
       wearables: seedWearables,
       aiInsights: seedAIInsights,
       aiChat: [],
@@ -187,6 +205,7 @@ export const useApp = create<AppState>()(
         set({
           clients: get().clients.filter((c) => c.id !== id),
           progress: get().progress.filter((p) => p.clientId !== id),
+          progressPhotos: get().progressPhotos.filter((p) => p.clientId !== id),
           dietPlans: get().dietPlans.filter((d) => d.clientId !== id),
           workoutPlans: get().workoutPlans.filter((w) => w.clientId !== id),
           mealPhotos: get().mealPhotos.filter((m) => m.clientId !== id),
@@ -196,6 +215,18 @@ export const useApp = create<AppState>()(
       addProgress: (entry) =>
         set({ progress: [...get().progress, { ...entry, id: newId("p") }] }),
       removeProgress: (id) => set({ progress: get().progress.filter((p) => p.id !== id) }),
+
+      addProgressPhoto: (photo) => {
+        const np: ProgressPhoto = {
+          ...photo,
+          id: newId("pp"),
+          uploadedAt: new Date().toISOString()
+        };
+        set({ progressPhotos: [np, ...get().progressPhotos] });
+        return np;
+      },
+      removeProgressPhoto: (id) =>
+        set({ progressPhotos: get().progressPhotos.filter((p) => p.id !== id) }),
 
       addProduct: (p) => {
         const np: Product = { ...p, id: newId("prod") };
@@ -394,6 +425,30 @@ export const useApp = create<AppState>()(
         }),
       removeMealPhoto: (id) => set({ mealPhotos: get().mealPhotos.filter((m) => m.id !== id) }),
 
+      addCalendarEvent: (input) => {
+        const event: CalendarEvent = {
+          ...input,
+          id: newId("cal"),
+          createdAt: new Date().toISOString()
+        };
+        set({ calendarEvents: [event, ...get().calendarEvents] });
+        return event;
+      },
+      updateCalendarEvent: (id, patch) =>
+        set({
+          calendarEvents: get().calendarEvents.map((e) =>
+            e.id !== id ? e : { ...e, ...patch, updatedAt: new Date().toISOString() }
+          )
+        }),
+      setCalendarEventStatus: (id, status) =>
+        set({
+          calendarEvents: get().calendarEvents.map((e) =>
+            e.id !== id ? e : { ...e, status, updatedAt: new Date().toISOString() }
+          )
+        }),
+      removeCalendarEvent: (id) =>
+        set({ calendarEvents: get().calendarEvents.filter((e) => e.id !== id) }),
+
       proposeMealChange: (input) => {
         const proposal: MealProposal = {
           ...input,
@@ -493,17 +548,19 @@ export const useApp = create<AppState>()(
         })
     }),
     {
-      name: "dietapp-store-v4",
+      name: "dietapp-store-v6",
       partialize: (state) => ({
         currentUserId: state.currentUserId,
         users: state.users,
         clients: state.clients,
         progress: state.progress,
+        progressPhotos: state.progressPhotos,
         products: state.products,
         dietPlans: state.dietPlans,
         workoutPlans: state.workoutPlans,
         mealPhotos: state.mealPhotos,
         mealProposals: state.mealProposals,
+        calendarEvents: state.calendarEvents,
         wearables: state.wearables,
         aiInsights: state.aiInsights,
         aiChat: state.aiChat,

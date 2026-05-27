@@ -41,6 +41,19 @@ export interface ProgressEntry {
   thigh?: number;
 }
 
+export type ProgressPhotoPose = "front" | "side" | "back" | "custom";
+
+export interface ProgressPhoto {
+  id: string;
+  clientId: string;
+  date: string;
+  pose: ProgressPhotoPose;
+  dataUrl: string;
+  weight?: number;
+  note?: string;
+  uploadedAt: string;
+}
+
 export interface Product {
   id: string;
   name: string;
@@ -113,6 +126,35 @@ export interface Macros {
   protein: number;
   fat: number;
   carbs: number;
+}
+
+export type CalendarEventKind =
+  | "workout"
+  | "meal"
+  | "checkin"
+  | "measurement"
+  | "consultation"
+  | "custom";
+
+export type CalendarEventStatus = "planned" | "done" | "missed" | "moved";
+
+export interface CalendarEvent {
+  id: string;
+  clientId: string;
+  trainerId: string;
+  kind: CalendarEventKind;
+  title: string;
+  date: string;
+  startTime?: string;
+  durationMinutes?: number;
+  workoutDayId?: string;
+  mealId?: string;
+  dietPlanId?: string;
+  workoutPlanId?: string;
+  status: CalendarEventStatus;
+  notes?: string;
+  createdAt: string;
+  updatedAt?: string;
 }
 
 export type MealPhotoStatus = "pending" | "approved" | "flagged";
